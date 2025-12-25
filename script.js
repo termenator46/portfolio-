@@ -428,10 +428,10 @@ const getVal = (id) => {
 
 // Set FormSubmit redirect back to this page (works on localhost and any domain)
 // Set FormSubmit redirect back to THIS page (works on localhost + GitHub Pages project path)
-if (nextEl) {
-  const base = window.location.href.split("?")[0].split("#")[0];
-  nextEl.value = `${base}?sent=1#contact`;
-}
+//if (nextEl) {
+//  const base = window.location.href.split("?")[0].split("#")[0];//
+ // nextEl.value = `${base}?sent=1#contact`;//
+
 
 let triedSubmit = false;
 
