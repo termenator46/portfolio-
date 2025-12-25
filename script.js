@@ -431,6 +431,40 @@ const getVal = (id) => {
 //if (nextEl) {
 //  const base = window.location.href.split("?")[0].split("#")[0];//
  // nextEl.value = `${base}?sent=1#contact`;//
+form.addEventListener("submit", async (e) => {
+  e.preventDefault(); // <-- это главное: убирает переходы/редиректы
+
+  triedSubmit = true;
+  const res = validate();
+  updateButton();
+
+  if (!res.ok) return;
+
+  sendBtn.disabled = true;
+  formStatus.textContent = "Sending…";
+
+  try {
+    const fd = new FormData(form);
+
+    const r = await fetch(form.action, {
+      method: "POST",
+      body: fd,
+      headers: { Accept: "application/json" }
+    });
+
+    if (r.ok) {
+      formStatus.textContent = "Sent! Thanks, I’ll reply as soon as I can.";
+      form.reset();
+      updateButton();
+    } else {
+      formStatus.textContent = "Oops. Something went wrong. Try again.";
+      sendBtn.disabled = false;
+    }
+  } catch (err) {
+    formStatus.textContent = "Network error. Please try again.";
+    sendBtn.disabled = false;
+  }
+});
 
 
 let triedSubmit = false;
