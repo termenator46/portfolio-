@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+
+  <title>Mitchell Klugman • QA Automation Engineer</title>
+  <meta name="description" content="QA Automation Engineer portfolio: Web UI + REST API testing, CI visibility, and reliable automation." />
+
+  <!-- Modern font (safe fallback if offline) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Decorative background layers (parallax + subtle depth) -->
+  <div class="bg" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+    <span class="grid"></span>
+  </div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" aria-hidden="true">
+    <span class="scroll-progress__bar"></span>
+  </div>
+
+  <!-- Floating "stamp" (changes per section while scrolling) -->
+  <div class="stamp" aria-hidden="true">
+    <span id="stampText">MITCHELL</span>
+  </div>
+
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="#home" aria-label="Go to top">
+        <span class="brand__mark" aria-hidden="true">MK</span>
+        <span class="brand__text">Mitchell Klugman</span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="#about">About</a>
+        <a href="#resume">Resume</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="topbar__actions">
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle theme">
+          <!-- Sun/Moon icon (inline SVG) -->
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0-16V0m0 24v-2M4.2 4.2 2.8 2.8m18.4 18.4-1.4-1.4M2 12H0m24 0h-2M4.2 19.8 2.8 21.2m18.4-18.4-1.4 1.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="section hero" id="home" data-stamp="MITCHELL">
+      <div class="container hero__grid" data-scroll3d>
+        <div class="hero__left reveal from-left">
+          <p class="kicker">QA ENGINEER • QA AUTOMATION ENGINEER</p>
+
+          <h1 class="hero__title">
+            Building confidence in releases<br/>
+            through <span class="accent">precision testing</span><span class="dot">.</span>
+          </h1>
+
+          <p class="hero__subtitle">
+            Middle QA Automation Engineer (SDET) focused on <strong>Web UI</strong> and <strong>REST API</strong> testing,
+            CI visibility, and reliable automation.
+          </p>
+
+          <div class="hero__cta">
+            <a class="btn primary" href="assets/Mitchell_Klugman_QA_Automation_Engineer_US.pdf" download>
+              Download CV
+            </a>
+            <a class="btn" href="#contact">
+              Contact Me
+            </a>
+          </div>
+
+          <div class="chips">
+            <span class="chip">
+              <span class="chip__icon" aria-hidden="true">🌍</span> Open to US Remote
+            </span>
+            <a class="chip" href="mailto:mitcel258@gmail.com" aria-label="Email">
+              <span class="chip__icon" aria-hidden="true">✉️</span> mitcel258@gmail.com
+            </a>
+            <span class="chip">
+              <span class="chip__icon" aria-hidden="true">🧪</span> Web &amp; API Testing
+            </span>
+          
+          
+          <div class="card why-card tilt" data-tilt data-tilt-max="7" aria-label="Why hire me card">
+            <div class="why-head">
+              <h3 class="card__title">Why Hire Me</h3>
+              <span class="why-pill">Ship-ready QA • Less risk • More signal</span>
+            </div>
+
+            <p class="why-lead">
+              I turn “it works on my machine” into <strong>repeatable confidence</strong> by building test suites that are
+              stable, CI-friendly, and focused on real user impact.
+            </p>
+
+            <ul class="why-list">
+              <li>
+                <span class="why-dot" aria-hidden="true"></span>
+                <div>
+                  <strong>Release confidence, not noise</strong>
+                  <span> Web UI + REST API coverage with clean reports and fast feedback loops.</span>
+                </div>
+              </li>
+              <li>
+                <span class="why-dot" aria-hidden="true"></span>
+                <div>
+                  <strong>Flake-resistant automation</strong>
+                  <span> POM + data builders, smart waits, and locator discipline to keep suites reliable.</span>
+                </div>
+              </li>
+              <li>
+                <span class="why-dot" aria-hidden="true"></span>
+                <div>
+                  <strong>Modern quality mindset</strong>
+                  <span> Clear expectations for edge cases, including non-deterministic AI outputs.</span>
+                </div>
+              </li>
+            </ul>
+
+            <div class="why-meta">
+              <div class="tagcloud">
+                <span class="tag">SDET mindset</span>
+                <span class="tag">CI-friendly</span>
+                <span class="tag">Quality gates</span>
+              </div>
+</div>
+          </div>
+          </div>
+
+          <div class="impact" aria-label="Impact highlights">
+            <div class="impact__item">
+              <div class="impact__k">CI-ready suites</div>
+              <div class="impact__v">Jenkins • Allure reports</div>
+            </div>
+            <div class="impact__item">
+              <div class="impact__k">Flake-resistant</div>
+              <div class="impact__v">Smart waits • Locator discipline</div>
+            </div>
+            <div class="impact__item">
+              <div class="impact__k">API + UI coverage</div>
+              <div class="impact__v">REST validation • Web flows</div>
+            </div>
+          </div>
+
+
+          <div class="social">
+
+            <a class="social__btn" href="https://github.com/termenator46" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0C17.8 3 18.8 3.3 18.8 3.3c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.2 0 4.6-2.7 5.6-5.3 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5Z"/>
+              </svg>
+              GitHub
+            </a>
+
+            <a class="social__btn" href="https://www.linkedin.com/in/mitch-klu/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 21V9h4v12H3Zm7 0V9h3.8v1.7h.1c.5-1 1.7-2 3.6-2 3.8 0 4.5 2.5 4.5 5.7V21h-4v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4Z"/>
+              </svg>
+              LinkedIn
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero "3D stack" (fixes the overlap issue + adds wow depth) -->
+        <div class="hero__right reveal from-right">
+          <div class="stack-float" aria-hidden="false">
+            <div class="stack tilt" data-stack="hero" data-tilt data-tilt-max="10" aria-label="QA focus cards (click to rotate)">
+            <div class="stack__card stack__card--back" role="button" data-card="back" aria-label="Automation card. Click to rotate.">
+              <h3>Automation</h3>
+              <div class="tagcloud">
+                <span class="tag">Java</span>
+                <span class="tag">Selenium</span>
+                <span class="tag">TestNG</span>
+                <span class="tag">POM</span>
+                <span class="tag">Git</span>
+              </div>
+            <div class="stack__actions"><button class="mini-btn" type="button" data-scroll-to="#projects">View Projects</button></div></div>
+
+            <div class="stack__card stack__card--mid" role="button" data-card="mid" aria-label="API and CI card. Click to rotate.">
+              <h3>API &amp; CI</h3>
+              <div class="tagcloud">
+                <span class="tag">RestAssured</span>
+                <span class="tag">Postman</span>
+                <span class="tag">Jenkins</span>
+                <span class="tag">Allure</span>
+                <span class="tag">Jira</span>
+              </div>
+            <div class="stack__actions"><button class="mini-btn" type="button" data-scroll-to="#resume">View Resume</button></div></div>
+
+            <div class="stack__card stack__card--front" role="button" data-card="front" aria-label="Core QA Focus card. Click to rotate.">
+              <h3>Core QA Focus</h3>
+              <ul class="bullet">
+                <li>Regression + smoke stability</li>
+                <li>REST API schema validation</li>
+                <li>Flaky test reduction</li>
+                <li>AI output validation</li>
+              </ul>
+
+              <div class="stack__actions">
+                <button class="mini-btn" type="button" data-scroll-to="#resume">Resume</button>
+                <button class="mini-btn" type="button" data-scroll-to="#projects">Projects</button>
+                <button class="mini-btn" type="button" data-scroll-to="#contact">Contact</button>
+              </div>
+<p class="micro">
+                Tip: click a card to rotate the stack. Hover for depth.
+              </p>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <!-- Big watermark name (subtle) -->
+        <div class="watermark" aria-hidden="true">MITCHELL</div>
+      </div>
+
+      <div class="scroll-hint" aria-hidden="true">
+        <span class="scroll-hint__dot"></span>
+        <span class="scroll-hint__text">Scroll</span>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about" data-stamp="ABOUT">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">About Me</h2>
+          <p class="section__subtitle">
+            I focus on building stable, CI-friendly automation and clear QA signals that teams can trust.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card reveal" data-scroll3d>
+            <h3 class="card__title">Summary</h3>
+            <p class="card__text">
+              Middle QA Automation Engineer specializing in automated testing for web applications and REST APIs.
+              Experienced in UI automation (Selenium, TestNG), API testing (RestAssured/Postman), and integrating tests
+              into CI pipelines (Jenkins, Allure). Strong in defect triage, test design, and validating AI-driven
+              features with non-deterministic outputs.
+            </p>
+          </div>
+
+          <div class="card reveal" data-scroll3d>
+            <h3 class="card__title">Key Skills</h3>
+            <div class="skills">
+              <span class="skill">Manual Testing</span>
+              <span class="skill">Automation</span>
+              <span class="skill">Test Cases</span>
+              <span class="skill">Bug Reporting</span>
+              <span class="skill">API Testing</span>
+              <span class="skill">CI / Reporting</span>
+              <span class="skill">UI/UX Validation</span>
+              <span class="skill">Cross-browser</span>
+              <span class="skill">Exploratory</span>
+              <span class="skill">Flaky Fixing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUME -->
+    <section class="section" id="resume" data-stamp="RESUME">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">Resume</h2>
+          <p class="section__subtitle">
+            Experience, education, and tools I use daily.
+          </p>
+        </div>
+
+        <div class="resume-grid">
+          <div class="card reveal" data-scroll3d>
+            <h3 class="card__title">Experience</h3>
+
+            <div class="timeline">
+              <article class="timeline__item">
+                <header class="timeline__head">
+                  <h4>QA Automation Engineer <span class="muted">@ NextGen QA Lab</span></h4>
+                  <span class="pill">Remote • 2023–2024</span>
+                </header>
+                <ul class="check">
+                  <li>Built and maintained a modular Selenium regression suite using Page Object Model.</li>
+                  <li>Implemented REST API automation with RestAssured (reusable request builders, schema validation).</li>
+                  <li>Integrated UI/API tests into Jenkins CI with Allure reporting for faster failure triage.</li>
+                  <li>Reduced flaky checks via better locators, waits, and test data handling.</li>
+                </ul>
+              </article>
+
+              <article class="timeline__item">
+                <header class="timeline__head">
+                  <h4>QA Engineer (Manual / AI-focused) <span class="muted">@ Web Design Sun</span></h4>
+                  <span class="pill">Remote • 2024–2025</span>
+                </header>
+                <ul class="check">
+                  <li>Owned quality validation for an AI text humanization system (“Walter”).</li>
+                  <li>Validated AI outputs for coherence, tone, relevance, and non-deterministic behavior.</li>
+                  <li>Performed exploratory/regression testing; documented expected behavior and defects in Jira.</li>
+                  <li>Conducted UI/UX testing from Figma designs; ensured responsive and cross-browser behavior.</li>
+                </ul>
+              </article>
+
+              <article class="timeline__item">
+                <header class="timeline__head">
+                  <h4>QA Automation Trainee (Internship) <span class="muted">@ Upteam QA Lab</span></h4>
+                  <span class="pill">Remote • 2025</span>
+                </header>
+                <ul class="check">
+                  <li>Performed API testing in Postman (positive/negative/boundary); logged defects in Jira.</li>
+                  <li>Supported Agile workflow and practiced Git + automation fundamentals.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+
+          <div class="stack-col">
+            <div class="card reveal" data-scroll3d>
+              <h3 class="card__title">Education &amp; Certifications</h3>
+              <ul class="list">
+                <li><strong>Kyiv International University</strong> — BSc in Computer Science (Online), 2025</li>
+                <li><strong>Automated Quality Assurance</strong> — UpTeam GmbH (2025)</li>
+                <li><strong>QA Manual &amp; Automation Tester</strong> — AIT TR GmbH (2025)</li>
+              </ul>
+            </div>
+
+            <div class="card reveal" data-scroll3d>
+              <h3 class="card__title">Tools &amp; Tech</h3>
+              <div class="skills">
+                <span class="skill">Java (Core/OOP)</span>
+                <span class="skill">Python (basic)</span>
+                <span class="skill">SQL/MySQL</span>
+                <span class="skill">Selenium WebDriver</span>
+                <span class="skill">TestNG</span>
+                <span class="skill">Playwright (basic)</span>
+                <span class="skill">RestAssured</span>
+                <span class="skill">Postman</span>
+                <span class="skill">JSON/XML Validation</span>
+                <span class="skill">Jenkins</span>
+                <span class="skill">GitHub Actions (basic)</span>
+                <span class="skill">Allure</span>
+                <span class="skill">Jira</span>
+                <span class="skill">TestRail</span>
+                <span class="skill">Git</span>
+              </div>
+            </div>
+
+            <div class="card reveal" data-scroll3d>
+              <h3 class="card__title">Languages</h3>
+              <div class="skills">
+                <span class="skill">English (Fluent)</span>
+                <span class="skill">Russian (Fluent)</span>
+                <span class="skill">Ukrainian (Fluent)</span>
+                <span class="skill">Spanish (Basic)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section" id="projects" data-stamp="PROJECTS">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">Projects</h2>
+          <p class="section__subtitle">
+            A few QA automation pieces I’ve built in practice. Selected QA automation work and tooling examples.
+          </p>
+        </div>
+
+        <div class="projects">
+          <article class="project-card tilt reveal" data-tilt data-tilt-max="8" data-scroll3d>
+            <div class="project-card__top">
+              <h3>API Automation Framework</h3>
+              <span class="badge">Java</span>
+            </div>
+            <p>
+              REST API test framework with reusable auth + request builders, schema validation, and smoke/regression runs in CI.
+            </p>
+              <p class="project__hl"><span class="project__hl-label">Highlights:</span> Auth/request builders, JSON schema validation, and smoke/regression runs wired for CI.</p>
+            <div class="meta">
+              <span class="tag">RestAssured</span>
+              <span class="tag">Jenkins</span>
+              <span class="tag">Allure</span>
+              <span class="tag">JSON Schema</span>
+            </div>
+            <div class="links">
+              <a href="https://github.com/termenator46/amr-fleet" target="_blank" rel="noopener noreferrer">GitHub</a>
+</div>
+          </article>
+
+          <article class="project-card tilt reveal" data-tilt data-tilt-max="8" data-scroll3d>
+            <div class="project-card__top">
+              <h3>UI Selenium Test Suite</h3>
+              <span class="badge">Selenium</span>
+            </div>
+            <p>
+              Page Object + Data Builder architecture, stable waits, and CI-friendly reporting focused on reliability.
+            </p>
+              <p class="project__hl"><span class="project__hl-label">Highlights:</span> Page Object + Data Builder, stable waits, and reporting that stays readable in CI.</p>
+            <div class="meta">
+              <span class="tag">Java</span>
+              <span class="tag">Selenium</span>
+              <span class="tag">TestNG</span>
+              <span class="tag">POM</span>
+            </div>
+            <div class="links">
+              <a href="https://github.com/termenator46/qa-utils" target="_blank" rel="noopener noreferrer">GitHub</a>
+</div>
+          </article>
+
+          <article class="project-card tilt reveal" data-tilt data-tilt-max="8" data-scroll3d>
+            <div class="project-card__top">
+              <h3>AI Output Validation Playbook</h3>
+              <span class="badge">QA</span>
+            </div>
+            <p>
+              A practical checklist for evaluating non-deterministic AI outputs: coherence, tone, relevance, and regression signals.
+            </p>
+              <p class="project__hl"><span class="project__hl-label">Highlights:</span> Practical checklist for coherence/tone/relevance with edge cases and regression signals.</p>
+            <div class="meta">
+              <span class="tag">Exploratory</span>
+              <span class="tag">Regression</span>
+              <span class="tag">Edge cases</span>
+              <span class="tag">Jira</span>
+            </div>
+            <div class="links">
+              <a href="https://github.com/termenator46/slam-demo" target="_blank" rel="noopener noreferrer">GitHub</a>
+</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section" id="contact" data-stamp="CONTACT">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">Contact</h2>
+          <p class="section__subtitle">
+            Send a message. The form will deliver it to <strong>mitcel258@gmail.com</strong>.
+          </p>
+        </div>
+
+        <div class="contact-grid">
+          <form class="card contact-form reveal" id="contactForm" novalidate data-scroll3d action="https://formsubmit.co/mitcel258@gmail.com" method="POST" data-formsubmit="true">
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required maxlength="80" placeholder="Your name" />
+              <small class="error" data-error-for="name"></small>
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required maxlength="120" placeholder="name@example.com" />
+              <small class="error" data-error-for="email"></small>
+            </div>
+
+                        
+
+            <div class="field">
+              <label for="company">Company</label>
+              <input id="company" name="company" type="text" autocomplete="organization" required maxlength="80" placeholder="Company (e.g. Acme Inc.)" />
+              <small class="error" data-error-for="company"></small>
+            </div>
+
+            <!-- Honeypot: hidden field to trap simple bots -->
+            <div class="field hp" aria-hidden="true">
+              <label for="website">Website</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+<div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="6" required maxlength="2000" placeholder="Type something..."></textarea>
+              <small class="error" data-error-for="message"></small>
+            </div>
+
+            
+
+
+                        <!-- FormSubmit configuration (no backend setup needed) -->
+
+
+                        <input type="hidden" name="_subject" value="New message from QA Portfolio" />
+
+
+                        <input type="hidden" name="_captcha" value="false" />
+
+
+                        <input type="hidden" name="_template" value="table" />
+
+
+                        <!-- _next is set dynamically in JS so it works locally and on any domain -->
+
+
+                        <input type="hidden" id="formNext" name="_next" value="" />
+
+
+            <button class="btn primary full" type="submit" id="sendBtn">
+              Send Message
+            </button>
+
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+
+          <aside class="card reveal" data-scroll3d>
+            <h3 class="card__title">Quick Contact</h3>
+
+            <div class="quick">
+              <div class="quick__row">
+                <span class="quick__label">Email</span>
+                <a href="mailto:mitcel258@gmail.com">mitcel258@gmail.com</a>
+              </div>
+              <div class="quick__row">
+                <span class="quick__label">Phone</span>
+                <a href="tel:+380976707150">+380 97 670 7150</a>
+              </div>
+              <div class="quick__row">
+                <span class="quick__label">Location</span>
+                <span>Remote</span>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <p class="micro">
+              Tip: If you host the frontend separately (GitHub Pages), enable CORS in the backend via
+              <code>CORS_ALLOWED_ORIGINS</code>.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <span>© <span id="year"></span> Mitchell Klugman</span>
+        <a href="#home" class="back-top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <button class="to-top" id="toTop" type="button" aria-label="Back to top">
+      ↑
+    </button>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
