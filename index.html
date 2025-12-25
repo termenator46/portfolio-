@@ -451,98 +451,88 @@ doctype html>
         </div>
       </div>
     </section>
+<!-- CONTACT -->
+<section class="section" id="contact" data-stamp="CONTACT">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 class="section__title">Contact</h2>
+      <p class="section__subtitle">
+        Send a message. The form will deliver it to <strong>mitcel258@gmail.com</strong>.
+      </p>
+    </div>
 
-    <!-- CONTACT -->
-    <section class="section" id="contact" data-stamp="CONTACT">
-      <div class="container">
-        <div class="section__head reveal">
-          <h2 class="section__title">Contact</h2>
-          <p class="section__subtitle">
-            Send a message. The form will deliver it to <strong>mitcel258@gmail.com</strong>.
-          </p>
+    <div class="contact-grid">
+      <form class="card contact-form reveal" id="contactForm"
+            action="https://formsubmit.co/mitcel258@gmail.com" method="POST"
+            novalidate data-scroll3d data-formsubmit="true">
+
+        <input type="hidden" name="_subject" value="New message from QA Portfolio">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" id="formNext" name="_next" value="https://termenator46.github.io/portfolio-/?sent=1#contact">
+
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required maxlength="80" placeholder="Your name" />
+          <small class="error" data-error-for="name"></small>
         </div>
 
-       <form class="card contact-form reveal" id="contactForm"
-      action="https://formsubmit.co/mitcel258@gmail.com" method="POST"
-      novalidate data-scroll3d data-formsubmit="true">
-
-  <!-- FormSubmit configuration -->
-  <input type="hidden" name="_subject" value="New message from QA Portfolio">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_template" value="table">
-
-  <!-- IMPORTANT: keep ONLY ONE _next in the whole file -->
-  <input type="hidden" id="formNext" name="_next" value="https://termenator46.github.io/portfolio-/?sent=1#contact">
-
-  <div class="field">
-    <label for="name">Name</label>
-    <input id="name" name="name" type="text" autocomplete="name"
-           required maxlength="80" placeholder="Your name" />
-    <small class="error" data-error-for="name"></small>
-  </div>
-
-  <div class="field">
-    <label for="email">Email</label>
-    <input id="email" name="email" type="email" autocomplete="email"
-           required maxlength="120" placeholder="name@example.com" />
-    <small class="error" data-error-for="email"></small>
-  </div>
-
-  <div class="field">
-    <label for="company">Company</label>
-    <input id="company" name="company" type="text" autocomplete="organization"
-           required maxlength="80" placeholder="Company (e.g. Acme Inc.)" />
-    <small class="error" data-error-for="company"></small>
-  </div>
-
-  <!-- Honeypot -->
-  <div class="field hp" aria-hidden="true">
-    <label for="website">Website</label>
-    <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
-  </div>
-
-  <div class="field">
-    <label for="message">Message</label>
-    <textarea id="message" name="message" rows="6"
-              required maxlength="2000" placeholder="Type something..."></textarea>
-    <small class="error" data-error-for="message"></small>
-  </div>
-
-  <button class="btn primary full" type="submit" id="sendBtn">Send Message</button>
-  <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-
-         
-</form>
-
-<aside class="card reveal" data-scroll3d>
-            <h3 class="card__title">Quick Contact</h3>
-
-            <div class="quick">
-              <div class="quick__row">
-                <span class="quick__label">Email</span>
-                <a href="mailto:mitcel258@gmail.com">mitcel258@gmail.com</a>
-              </div>
-              <div class="quick__row">
-                <span class="quick__label">Phone</span>
-                <a href="tel:+380976707150">+380 97 670 7150</a>
-              </div>
-              <div class="quick__row">
-                <span class="quick__label">Location</span>
-                <span>Remote</span>
-              </div>
-            </div>
-         
-
-            <div class="divider"></div>
-
-            <p class="micro">
-              Tip: If you host the frontend separately (GitHub Pages), enable CORS in the backend via
-              <code>CORS_ALLOWED_ORIGINS</code>.
-            </p>
-          </aside>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required maxlength="120" placeholder="name@example.com" />
+          <small class="error" data-error-for="email"></small>
         </div>
-      </div>
-    </section>
+
+        <div class="field">
+          <label for="company">Company</label>
+          <input id="company" name="company" type="text" autocomplete="organization" required maxlength="80" placeholder="Company (e.g. Acme Inc.)" />
+          <small class="error" data-error-for="company"></small>
+        </div>
+
+        <div class="field hp" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="6" required maxlength="2000" placeholder="Type something..."></textarea>
+          <small class="error" data-error-for="message"></small>
+        </div>
+
+        <button class="btn primary full" type="submit" id="sendBtn">Send Message</button>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      </form>
+
+      <aside class="card reveal" data-scroll3d>
+        <h3 class="card__title">Quick Contact</h3>
+
+        <div class="quick">
+          <div class="quick__row">
+            <span class="quick__label">Email</span>
+            <a href="mailto:mitcel258@gmail.com">mitcel258@gmail.com</a>
+          </div>
+          <div class="quick__row">
+            <span class="quick__label">Phone</span>
+            <a href="tel:+380976707150">+380 97 670 7150</a>
+          </div>
+          <div class="quick__row">
+            <span class="quick__label">Location</span>
+            <span>Remote</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p class="micro">
+          Tip: If you host the frontend separately (GitHub Pages), enable CORS in the backend via
+          <code>CORS_ALLOWED_ORIGINS</code>.
+        </p>
+      </aside>
+    </div>
+  </div>
+</section>
+
 
     <footer class="footer">
       <div class="container footer__inner">
