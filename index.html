@@ -1,659 +1,1454 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="color-scheme" content="light dark" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Mitchell Klugman · QA Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:950vh;background:#020805;font-family:'JetBrains Mono',monospace;overflow-x:hidden}
+#c{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
 
-  <title>Mitchell Klugman • QA Automation Engineer</title>
-  <meta name="description" content="QA Automation Engineer — Web UI + REST API testing, CI visibility, fraud analytics, and reliable automation." />
+/* ════ BOOT SCREEN ════ */
+#boot{
+  position:fixed;inset:0;z-index:900;
+  background:#020805;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .6s;
+}
+#boot.done{opacity:0;pointer-events:none}
+.boot-logo{
+  font-family:'DM Serif Display',serif;font-size:2.4rem;color:#22d07a;
+  margin-bottom:32px;letter-spacing:.05em;
+  text-shadow:0 0 30px rgba(34,208,122,.6);
+}
+.boot-logo span{color:#fff}
+#boot-terminal{
+  width:min(520px,88vw);background:rgba(10,26,14,.95);
+  border:1px solid rgba(34,208,122,.35);border-radius:12px;
+  padding:24px 28px;font-family:'JetBrains Mono',monospace;
+  font-size:13px;line-height:2;min-height:180px;
+}
+#boot-text{color:#22d07a;white-space:pre-line;word-break:break-all}
+.boot-cursor{
+  display:inline-block;width:9px;height:15px;
+  background:#22d07a;animation:blink .8s step-end infinite;
+  vertical-align:middle;margin-left:2px;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.boot-bar{
+  margin-top:20px;width:min(520px,88vw);height:3px;
+  background:rgba(34,208,122,.12);border-radius:2px;overflow:hidden;
+}
+.boot-bar-fill{
+  height:100%;background:#22d07a;width:0%;
+  box-shadow:0 0 10px rgba(34,208,122,.8);
+  transition:width .08s linear;
+}
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+/* ════ HUD ════ */
+#hud{position:fixed;inset:0;z-index:10;pointer-events:none}
 
-  <link rel="stylesheet" href="styles.css" />
+#topbar{
+  position:absolute;top:0;left:0;right:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 36px;
+  background:linear-gradient(180deg,rgba(2,8,5,.94),transparent);
+  pointer-events:all;
+}
+.brand{font-size:12px;font-weight:700;color:#22d07a;letter-spacing:.2em;display:flex;align-items:center;gap:9px}
+.ldot{width:7px;height:7px;border-radius:50%;background:#22d07a;box-shadow:0 0 8px #22d07a;animation:lp 2s ease infinite}
+@keyframes lp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
+nav{display:flex;gap:4px}
+nav button{
+  background:none;border:none;cursor:pointer;pointer-events:all;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:rgba(195,240,215,.45);letter-spacing:.1em;
+  padding:6px 14px;border-radius:6px;transition:all .2s;
+}
+nav button:hover{color:#22d07a;background:rgba(34,208,122,.09)}
+#zchip{font-size:10px;color:rgba(34,208,122,.38);letter-spacing:.14em;padding:4px 10px;border:1px solid rgba(34,208,122,.14);border-radius:4px}
+#muteBtn{font-size:13px;background:none;border:none;cursor:pointer;color:rgba(34,208,122,.45);padding:4px 8px;transition:color .2s;pointer-events:all;letter-spacing:.06em;font-family:'JetBrains Mono',monospace}
+#muteBtn:hover{color:#22d07a}
+
+#prog{position:absolute;top:0;left:0;right:0;height:2px;background:rgba(34,208,122,.07)}
+#pfill{height:100%;width:0%;background:#22d07a;box-shadow:0 0 10px rgba(34,208,122,.9);transition:width .08s linear}
+
+/* ── Hero ── */
+#hero{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);
+  text-align:center;transition:opacity .5s;pointer-events:none;
+  opacity:0;/* starts hidden, shown after boot */
+}
+#hero.show{opacity:1}
+#hero.away{opacity:0;pointer-events:none}
+#hero.away .hbtns,#hero.away .hvoice,#hero.away *{pointer-events:none}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10px;letter-spacing:.22em;color:#22d07a;
+  border:1px solid rgba(34,208,122,.28);border-radius:99px;
+  padding:5px 16px;margin-bottom:20px;background:rgba(34,208,122,.06);
+}
+.edot{width:5px;height:5px;border-radius:50%;background:#22d07a;box-shadow:0 0 5px #22d07a}
+.hname{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(3rem,7vw,5.6rem);color:#fff;
+  line-height:1.06;margin-bottom:14px;letter-spacing:-.02em;
+}
+.hname em{color:#22d07a;font-style:normal}
+.htagline{font-family:'DM Serif Display',serif;font-size:clamp(1rem,2vw,1.45rem);color:rgba(255,255,255,.58);margin-bottom:8px}
+.hsub{font-size:10px;color:rgba(195,240,215,.35);letter-spacing:.16em;margin-bottom:30px}
+.hbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;pointer-events:all}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
+.btn-p{background:#22d07a;color:#020805;box-shadow:0 0 24px rgba(34,208,122,.4)}
+.btn-p:hover{box-shadow:0 0 42px rgba(34,208,122,.65);transform:translateY(-2px)}
+.btn-g{background:rgba(34,208,122,.07);color:#22d07a;border:1px solid rgba(34,208,122,.35)}
+.btn-g:hover{background:rgba(34,208,122,.13);transform:translateY(-2px)}
+
+/* scroll hint */
+#shint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .4s;pointer-events:none}
+#shint.gone{opacity:0}
+.shtxt{font-size:9px;color:rgba(34,208,122,.42);letter-spacing:.24em}
+.shbar{width:1px;height:46px;background:linear-gradient(#22d07a,transparent);animation:sba 1.8s ease infinite}
+@keyframes sba{0%,100%{opacity:.35}50%{opacity:1}}
+
+#coords{position:absolute;bottom:24px;right:28px;font-size:10px;color:rgba(34,208,122,.26);letter-spacing:.1em;line-height:2;text-align:right}
+#sidelbl{position:absolute;right:24px;top:50%;transform:translateY(-50%);font-size:9px;color:rgba(34,208,122,.26);letter-spacing:.24em;writing-mode:vertical-rl}
+#hint{position:absolute;bottom:44%;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(34,208,122,.7);letter-spacing:.16em;padding:6px 18px;border:1px solid rgba(34,208,122,.25);border-radius:7px;background:rgba(2,8,5,.85);backdrop-filter:blur(12px);opacity:0;transition:opacity .3s;pointer-events:none}
+#hint.on{opacity:1}
+
+/* ── Modal ── */
+#modal{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:rgba(2,8,5,.72);backdrop-filter:blur(7px);opacity:0;pointer-events:none;transition:opacity .3s}
+#modal.on{opacity:1;pointer-events:all}
+#mbox{width:min(580px,90vw);max-height:88vh;overflow-y:auto;background:rgba(4,14,8,.98);border:1px solid rgba(34,208,122,.44);border-radius:18px;padding:34px;box-shadow:0 0 80px rgba(34,208,122,.14),0 50px 100px rgba(0,0,0,.85)}
+#mbox::-webkit-scrollbar{width:4px}
+#mbox::-webkit-scrollbar-thumb{background:rgba(34,208,122,.3);border-radius:2px}
+.mrow{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.mbadge{font-size:10px;padding:3px 10px;border-radius:4px;background:rgba(34,208,122,.1);color:#22d07a;border:1px solid rgba(34,208,122,.25);letter-spacing:.1em}
+.mimp{font-size:10px;padding:3px 10px;border-radius:4px;background:rgba(56,213,255,.08);color:#38d5ff;border:1px solid rgba(56,213,255,.22);letter-spacing:.08em}
+.mtitle{font-family:'DM Serif Display',serif;font-size:1.75rem;color:#fff;margin-bottom:10px}
+.mwhy{font-size:13px;line-height:1.8;color:rgba(56,213,255,.72);font-style:italic;margin-bottom:14px;padding-left:14px;border-left:2px solid rgba(56,213,255,.3)}
+.mdesc{font-size:13px;line-height:1.8;color:rgba(195,240,215,.72);margin-bottom:18px}
+.mtech{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:26px}
+.mchip{font-size:10px;padding:3px 10px;border-radius:4px;background:rgba(34,208,122,.07);color:#22d07a;border:1px solid rgba(34,208,122,.18)}
+.mfooter{display:flex;gap:10px;align-items:center}
+.mgh{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:8px;background:#22d07a;color:#020805;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;text-decoration:none;box-shadow:0 0 20px rgba(34,208,122,.38);transition:all .2s}
+.mgh:hover{box-shadow:0 0 36px rgba(34,208,122,.6);transform:translateY(-2px)}
+.mclose{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;background:transparent;color:#22d07a;border:1px solid rgba(34,208,122,.32);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.mclose:hover{background:rgba(34,208,122,.08)}
+
+/* ── Terminal Contact Modal ── */
+#czone{
+  position:fixed;inset:0;z-index:50;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(2,8,5,.85);
+  backdrop-filter:blur(10px);
+  opacity:0;pointer-events:none;
+  transition:opacity .5s;
+}
+#czone.on{opacity:1;pointer-events:all}
+#czone:not(.on) *{pointer-events:none!important}
+
+@keyframes termSlideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes termGlow{0%,100%{box-shadow:0 0 20px rgba(34,208,122,.2),0 0 60px rgba(34,208,122,.08)}50%{box-shadow:0 0 40px rgba(34,208,122,.4),0 0 80px rgba(34,208,122,.16)}}
+@keyframes voicePulse{0%,100%{box-shadow:0 0 0 0 rgba(34,208,122,.6),0 0 24px rgba(34,208,122,.4)}50%{box-shadow:0 0 0 8px rgba(34,208,122,0),0 0 42px rgba(34,208,122,.65)}}
+
+.term-card{
+  width:min(560px,90vw);
+  background:rgba(4,14,8,.98);
+  border:1px solid rgba(34,208,122,.5);
+  border-radius:16px;overflow:hidden;
+  animation:termSlideUp .45s ease forwards,termGlow 2.8s ease infinite .45s;
+  position:relative;
+}
+.term-card::after{
+  content:'';position:absolute;inset:0;pointer-events:none;border-radius:16px;
+  background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(34,208,122,.018) 3px,rgba(34,208,122,.018) 4px);
+}
+.term-header{
+  background:rgba(10,26,14,.95);
+  padding:14px 20px;display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(34,208,122,.18);
+}
+.term-dots{display:flex;gap:7px}
+.tdot{width:12px;height:12px;border-radius:50%}
+.tdot-r{background:#ef4444}.tdot-y{background:#f59e0b}.tdot-g{background:#22c55e}
+.term-title-bar{font-size:11px;color:rgba(34,208,122,.7);letter-spacing:.16em;margin-left:8px;display:flex;align-items:center;gap:6px}
+.term-cursor{display:inline-block;width:8px;height:13px;background:#22d07a;animation:blink .8s step-end infinite;vertical-align:middle}
+.term-body{padding:28px 32px 24px}
+.term-ready{font-size:1.9rem;font-family:'DM Serif Display',serif;color:#fff;margin-bottom:6px;letter-spacing:.04em;min-height:2.4rem}
+.term-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.term-chip{font-size:9px;letter-spacing:.14em;padding:4px 12px;border-radius:4px;background:rgba(34,208,122,.08);color:#22d07a;border:1px solid rgba(34,208,122,.25)}
+.term-seq{display:flex;flex-direction:column;gap:3px;margin-bottom:12px;min-height:54px}
+.tseq-line{font-size:11px;font-family:'JetBrains Mono',monospace;line-height:1.7;white-space:pre}
+.tseq-cmd{color:rgba(34,208,122,.55)}
+.tseq-ok{color:#22d07a}
+.term-links{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.term-links li{opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
+.term-links li.show{opacity:1;transform:translateY(0)}
+.clink{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:#22d07a;padding:9px 18px;border:1px solid rgba(34,208,122,.3);border-radius:8px;text-decoration:none;background:rgba(34,208,122,.06);transition:all .2s;pointer-events:all;width:100%;font-family:'JetBrains Mono',monospace}
+.clink:hover{background:rgba(34,208,122,.15);border-color:rgba(34,208,122,.6);transform:translateX(4px)}
+.term-close{display:block;width:100%;padding:11px;background:transparent;color:rgba(34,208,122,.6);border:1px solid rgba(34,208,122,.2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:all .2s}
+.term-close:hover{background:rgba(34,208,122,.08);color:#22d07a;border-color:rgba(34,208,122,.5)}
+.btn-voice.playing{animation:voicePulse 1.4s ease infinite;border-color:rgba(34,208,122,.8);background:rgba(34,208,122,.18)}
+.hvoice{margin-top:14px;pointer-events:all;display:flex;justify-content:center}
+.btn-voice-main{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 28px;border-radius:99px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;
+  background:transparent;color:#22d07a;
+  border:1px solid rgba(34,208,122,.45);cursor:pointer;
+  transition:all .25s;
+  box-shadow:0 0 18px rgba(34,208,122,.18);
+}
+.btn-voice-main:hover{background:rgba(34,208,122,.1);box-shadow:0 0 32px rgba(34,208,122,.4);transform:translateY(-1px)}
+.btn-voice-main.playing{animation:voicePulse 1.4s ease infinite;border-color:rgba(34,208,122,.8)}
+
+/* ── Voice Modal ── */
+#voiceModal{
+  position:fixed;inset:0;z-index:60;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(2,8,5,.88);backdrop-filter:blur(12px);
+  opacity:0;pointer-events:none;transition:opacity .4s;
+}
+#voiceModal.on{opacity:1;pointer-events:all}
+#voiceModal:not(.on) *{pointer-events:none!important}
+.vm-card{
+  width:min(620px,92vw);max-height:85vh;overflow-y:auto;
+  background:rgba(4,14,8,.98);border:1px solid rgba(34,208,122,.5);
+  border-radius:16px;overflow:hidden;position:relative;
+  animation:termSlideUp .4s ease forwards,termGlow 2.8s ease infinite .4s;
+}
+.vm-card::-webkit-scrollbar{width:4px}
+.vm-card::-webkit-scrollbar-thumb{background:rgba(34,208,122,.3);border-radius:2px}
+.vm-card::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:16px;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(34,208,122,.015) 3px,rgba(34,208,122,.015) 4px)}
+.vm-body{padding:28px 32px 28px;overflow-y:auto;max-height:calc(85vh - 60px)}
+.vm-label{font-size:9px;letter-spacing:.2em;color:rgba(34,208,122,.5);margin-bottom:16px}
+.vm-text{font-size:14px;line-height:1.9;color:rgba(195,240,215,.82);white-space:pre-line}
+.vm-text strong{color:#fff;font-weight:700}
+.vm-controls{
+  display:flex;align-items:center;gap:12px;
+  padding:18px 32px;border-top:1px solid rgba(34,208,122,.12);
+  background:rgba(10,26,14,.6);
+}
+.vm-playbtn{
+  flex-shrink:0;width:42px;height:42px;border-radius:50%;
+  background:#22d07a;color:#020805;border:none;cursor:pointer;
+  font-size:16px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 20px rgba(34,208,122,.5);transition:all .2s;
+}
+.vm-playbtn:hover{box-shadow:0 0 36px rgba(34,208,122,.8);transform:scale(1.08)}
+.vm-playbtn.playing{animation:voicePulse 1.4s ease infinite}
+.vm-progress{flex:1;height:3px;background:rgba(34,208,122,.15);border-radius:2px;cursor:pointer;position:relative}
+.vm-progress-fill{height:100%;background:#22d07a;border-radius:2px;width:0%;box-shadow:0 0 6px rgba(34,208,122,.8);transition:width .25s linear}
+.vm-time{font-size:10px;color:rgba(34,208,122,.45);letter-spacing:.08em;min-width:36px;text-align:right}
+.vm-close-btn{
+  flex-shrink:0;padding:9px 16px;background:transparent;
+  color:rgba(34,208,122,.5);border:1px solid rgba(34,208,122,.2);
+  border-radius:8px;font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .2s;
+}
+.vm-close-btn:hover{color:#22d07a;border-color:rgba(34,208,122,.5);background:rgba(34,208,122,.07)}
+
+/* Mobile */
+#mwarn{display:none;position:fixed;inset:0;z-index:9999;background:#020805;align-items:center;justify-content:center;text-align:center;padding:32px;flex-direction:column;gap:16px}
+@media(max-width:700px){#mwarn{display:flex}body{min-height:100vh}#c,#hud,#boot{display:none}}
+</style>
 </head>
-
 <body>
-  <!-- Background layers -->
-  <div class="bg" aria-hidden="true">
-    <span class="orb orb-1"></span>
-    <span class="orb orb-2"></span>
-    <span class="orb orb-3"></span>
-    <span class="grid"></span>
+
+<!-- Mobile -->
+<div id="mwarn">
+  <div style="font-family:'DM Serif Display',serif;font-size:1.6rem;color:#22d07a">// Open on Desktop</div>
+  <div style="font-size:13px;color:rgba(195,240,215,.5);line-height:1.8">This 3D world needs a desktop browser.<br>Scroll through Mitchell's world on a larger screen.</div>
+  <a class="btn btn-g" href="mailto:mitcel258@gmail.com" style="pointer-events:all">✉ mitcel258@gmail.com</a>
+</div>
+
+<!-- Boot screen -->
+<div id="boot">
+  <div class="boot-logo">Mitchell <span>Klugman</span></div>
+  <div id="boot-terminal">
+    <span id="boot-text"></span><span class="boot-cursor"></span>
   </div>
+  <div class="boot-bar"><div class="boot-bar-fill" id="bbar"></div></div>
+</div>
 
-  <!-- Scroll progress -->
-  <div class="scroll-progress" aria-hidden="true">
-    <span class="scroll-progress__bar"></span>
-  </div>
+<canvas id="c"></canvas>
 
-  <!-- Floating stamp -->
-  <div class="stamp" aria-hidden="true">
-    <span id="stampText">MITCHELL</span>
-  </div>
+<div id="hud">
+  <div id="prog"><div id="pfill"></div></div>
 
-  <header class="topbar">
-    <div class="container topbar__inner">
-      <a class="brand" href="#home" aria-label="Go to top">
-        <span class="brand__mark" aria-hidden="true">MK</span>
-        <span class="brand__text">Mitchell Klugman</span>
-      </a>
-
-      <nav class="nav" id="nav">
-        <a href="#about">About</a>
-        <a href="#resume">Resume</a>
-        <a href="#experience">Experience</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact">Contact</a>
-      </nav>
-
-      <div class="topbar__actions">
-        <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle theme">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0-16V0m0 24v-2M4.2 4.2 2.8 2.8m18.4 18.4-1.4-1.4M2 12H0m24 0h-2M4.2 19.8 2.8 21.2m18.4-18.4-1.4 1.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
-
-        <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
+  <div id="topbar">
+    <div class="brand"><span class="ldot"></span>MK · QA_ENGINEER</div>
+    <nav>
+      <button data-goto="0.18">// WHO AM I</button>
+      <button data-goto="0.36">// PROJECTS</button>
+      <button data-goto="0.55">// BEYOND QA</button>
+      <button data-goto="0.72">// EXPERIENCE</button>
+      <button data-goto="0.96">// HIRE ME</button>
+    </nav>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button id="muteBtn" onclick="toggleAmbient()" title="Toggle music">♪</button>
+      <div id="zchip">HERO_ZONE</div>
     </div>
-  </header>
+  </div>
 
-  <main id="top">
+  <div id="hero">
+    <div class="eyebrow"><span class="edot"></span>QA AUTOMATION ENGINEER · SDET · EU REMOTE<span class="edot"></span></div>
+    <h1 class="hname">Mitchell <em>Klugman</em></h1>
+    <p class="htagline">I don't just find bugs.<br>I build systems that prevent them.</p>
+    <p class="hsub">SCROLL DOWN · WALK THROUGH MY WORK · CLICK ANY CARD</p>
+    <div class="hvoice">
+      <button type="button" class="btn-voice-main" id="voiceBtn" onclick="toggleVoice(event)">♪ PLAY VOICE INTRO</button>
+    </div>
+  </div>
 
-    <!-- ===== HERO ===== -->
-    <section class="section hero" id="home" data-stamp="MITCHELL">
-      <div class="container hero__grid" data-scroll3d>
+  <div id="shint">
+    <div class="shtxt">SCROLL TO EXPLORE THE WORLD</div>
+    <div class="shbar"></div>
+  </div>
 
-        <div class="hero__left reveal from-left">
-          <p class="kicker">QA ENGINEER • AUTOMATION • ANALYTICS</p>
+  <div id="hint">› CLICK TO EXPAND</div>
+  <div id="sidelbl">HERO</div>
+  <div id="coords">Z: +0.0<br>// HERO</div>
 
-          <h1 class="hero__title">
-            Building confidence in releases<br/>
-            through <span class="accent">precision testing</span><span class="dot">.</span>
-          </h1>
 
-          <p class="hero__subtitle">
-            QA Automation Engineer (SDET) focused on <strong>Web UI</strong> and <strong>REST API</strong> testing,
-            CI visibility, fraud analytics, and reliable automation.
-          </p>
+</div>
 
-          <div class="hero__cta">
-            <a class="btn primary" href="assets/Resume_Mitchell_Klugman_EA1.pdf" download>
-              Download CV
-            </a>
-            <a class="btn" href="#contact">
-              Contact Me
-            </a>
-          </div>
+<div id="modal" onclick="if(event.target===this)closeModal()">
+  <div id="mbox">
+    <div id="mbody"></div>
+    <div class="mfooter">
+      <a class="mgh" id="mgh" href="javascript:void(0)" target="_blank" rel="noopener" onclick="event.stopPropagation();if(this.dataset.url)window.open(this.dataset.url,'_blank')">↗ View on GitHub</a>
+      <button type="button" class="mclose" onclick="event.stopPropagation();closeModal()">← Back to world</button>
+    </div>
+  </div>
+</div>
 
-          <div class="chips">
-            <span class="chip">
-              <span class="chip__icon" aria-hidden="true">🌍</span> EU Remote · Open to Relocation
-            </span>
-            <a class="chip" href="mailto:mitcel258@gmail.com" aria-label="Email">
-              <span class="chip__icon" aria-hidden="true">✉️</span> mitcel258@gmail.com
-            </a>
-            <span class="chip">
-              <span class="chip__icon" aria-hidden="true">🧪</span> Web &amp; API Testing
-            </span>
-          </div>
-
-          <!-- Why Hire Me — outside chips, proper structure -->
-          <div class="card why-card tilt" data-tilt data-tilt-max="7" aria-label="Why hire me card">
-            <div class="why-head">
-              <h3 class="card__title">Why Hire Me</h3>
-              <span class="why-pill">Ship-ready QA • Less risk • More signal</span>
-            </div>
-
-            <p class="why-lead">
-              I turn "it works on my machine" into <strong>repeatable confidence</strong> — building test suites that are
-              stable, CI-friendly, and focused on real user impact.
-            </p>
-
-            <ul class="why-list">
-              <li>
-                <span class="why-dot" aria-hidden="true"></span>
-                <div>
-                  <strong>Release confidence, not noise</strong>
-                  <span> — Web UI + REST API coverage with clean reports and fast feedback loops.</span>
-                </div>
-              </li>
-              <li>
-                <span class="why-dot" aria-hidden="true"></span>
-                <div>
-                  <strong>Flake-resistant automation</strong>
-                  <span> — POM + data builders, smart waits, and locator discipline.</span>
-                </div>
-              </li>
-              <li>
-                <span class="why-dot" aria-hidden="true"></span>
-                <div>
-                  <strong>Beyond the test suite</strong>
-                  <span> — SQL analytics, fraud detection logic, and integration tooling on top of QA work.</span>
-                </div>
-              </li>
-            </ul>
-
-            <div class="why-meta">
-              <div class="tagcloud">
-                <span class="tag">SDET mindset</span>
-                <span class="tag">CI-friendly</span>
-                <span class="tag">Quality gates</span>
-                <span class="tag">Analytics</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="impact" aria-label="Impact highlights">
-            <div class="impact__item">
-              <div class="impact__k">CI-ready suites</div>
-              <div class="impact__v">Jenkins • Allure reports</div>
-            </div>
-            <div class="impact__item">
-              <div class="impact__k">Flake-resistant</div>
-              <div class="impact__v">Smart waits • POM</div>
-            </div>
-            <div class="impact__item">
-              <div class="impact__k">API + UI + SQL</div>
-              <div class="impact__v">REST • Web flows • Grafana</div>
-            </div>
-          </div>
-
-          <div class="social">
-            <a class="social__btn" href="https://github.com/termenator46" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.6-1.4-1.4-1.7-1.4-1.7-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0C17.8 3 18.8 3.3 18.8 3.3c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.2 0 4.6-2.7 5.6-5.3 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5Z"/>
-              </svg>
-              GitHub
-            </a>
-
-            <a class="social__btn" href="https://www.linkedin.com/in/mitch-klu/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="currentColor" d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 21V9h4v12H3Zm7 0V9h3.8v1.7h.1c.5-1 1.7-2 3.6-2 3.8 0 4.5 2.5 4.5 5.7V21h-4v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4Z"/>
-              </svg>
-              LinkedIn
-            </a>
-          </div>
-        </div>
-
-        <!-- Hero 3D stack -->
-        <div class="hero__right reveal from-right">
-          <div class="stack-float" aria-hidden="false">
-            <div class="stack tilt" data-stack="hero" data-tilt data-tilt-max="10" aria-label="QA focus cards (click to rotate)">
-              <div class="stack__card stack__card--back" role="button" data-card="back" aria-label="Automation card. Click to rotate.">
-                <h3>Automation</h3>
-                <div class="tagcloud">
-                  <span class="tag">Java</span>
-                  <span class="tag">Selenium</span>
-                  <span class="tag">TestNG</span>
-                  <span class="tag">POM</span>
-                  <span class="tag">Git</span>
-                </div>
-                <div class="stack__actions"><button class="mini-btn" type="button" data-scroll-to="#projects">View Projects</button></div>
-              </div>
-
-              <div class="stack__card stack__card--mid" role="button" data-card="mid" aria-label="API and CI card. Click to rotate.">
-                <h3>API &amp; CI</h3>
-                <div class="tagcloud">
-                  <span class="tag">RestAssured</span>
-                  <span class="tag">Postman</span>
-                  <span class="tag">Jenkins</span>
-                  <span class="tag">Allure</span>
-                  <span class="tag">Jira</span>
-                </div>
-                <div class="stack__actions"><button class="mini-btn" type="button" data-scroll-to="#resume">View Resume</button></div>
-              </div>
-
-              <div class="stack__card stack__card--front" role="button" data-card="front" aria-label="Core QA Focus card. Click to rotate.">
-                <h3>Core QA Focus</h3>
-                <ul class="bullet">
-                  <li>Regression + smoke stability</li>
-                  <li>REST API schema validation</li>
-                  <li>Flaky test reduction</li>
-                  <li>AI output validation</li>
-                  <li>Fraud &amp; telemetry analytics</li>
-                </ul>
-                <div class="stack__actions">
-                  <button class="mini-btn" type="button" data-scroll-to="#resume">Resume</button>
-                  <button class="mini-btn" type="button" data-scroll-to="#projects">Projects</button>
-                  <button class="mini-btn" type="button" data-scroll-to="#contact">Contact</button>
-                </div>
-                <p class="micro">Tip: click a card to rotate the stack.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="watermark" aria-hidden="true">MITCHELL</div>
+<div id="czone" onclick="if(event.target===this)closeCzone()">
+  <div class="term-card">
+    <div class="term-header">
+      <div class="term-dots">
+        <span class="tdot tdot-r"></span>
+        <span class="tdot tdot-y"></span>
+        <span class="tdot tdot-g"></span>
       </div>
-
-      <div class="scroll-hint" aria-hidden="true">
-        <span class="scroll-hint__dot"></span>
-        <span class="scroll-hint__text">Scroll</span>
+      <div class="term-title-bar">// CONTACT_INITIATED<span class="term-cursor"></span></div>
+    </div>
+    <div class="term-body">
+      <div class="term-seq" id="termSeq"></div>
+      <div class="term-ready" id="termReady"></div>
+      <div class="term-chips">
+        <span class="term-chip">AVAILABLE_NOW</span>
+        <span class="term-chip">EU_REMOTE</span>
+        <span class="term-chip">OPEN_TO_RELOCATION</span>
       </div>
-    </section>
+      <ul class="term-links" id="termLinks">
+        <li><a class="clink" href="mailto:mitcel258@gmail.com" onclick="event.stopPropagation()">✉ mitcel258@gmail.com</a></li>
+        <li><a class="clink" href="https://www.linkedin.com/in/mitch-klu/" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ LinkedIn</a></li>
+        <li><a class="clink" href="https://github.com/termenator46" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ GitHub</a></li>
+        <li><a class="clink" href="tel:+380976707150" onclick="event.stopPropagation()">✆ +380 97 670 7150</a></li>
+      </ul>
+      <button class="term-close" onclick="closeCzone()">[ CLOSE_CONNECTION ]</button>
+    </div>
+  </div>
+</div>
 
-    <!-- ===== ABOUT ===== -->
-    <section class="section" id="about" data-stamp="ABOUT">
-      <div class="container">
-        <div class="section__head reveal">
-          <h2 class="section__title">About Me</h2>
-          <p class="section__subtitle">
-            I focus on stable, CI-friendly automation and clear QA signals that teams can trust — plus the analytical tooling to back it up.
-          </p>
-        </div>
-
-        <div class="grid-2">
-          <div class="card reveal" data-scroll3d>
-            <h3 class="card__title">Summary</h3>
-            <p class="card__text">
-              QA Automation Engineer (SDET) specializing in automated testing for web applications and REST APIs.
-              Experienced in UI automation (Selenium, TestNG), API testing (RestAssured/Postman), and integrating tests
-              into CI pipelines (Jenkins, Allure). Additionally strong in SQL-based analytics, fraud detection logic,
-              and operational workflow automation — a broader profile than typical QA.
-            </p>
-          </div>
-
-          <div class="card reveal" data-scroll3d>
-            <h3 class="card__title">Key Skills</h3>
-            <div class="skills">
-              <span class="skill">Manual Testing</span>
-              <span class="skill">Automation</span>
-              <span class="skill">Test Design</span>
-              <span class="skill">Bug Reporting</span>
-              <span class="skill">API Testing</span>
-              <span class="skill">CI / Reporting</span>
-              <span class="skill">UI/UX Validation</span>
-              <span class="skill">Cross-browser</span>
-              <span class="skill">SQL Analytics</span>
-              <span class="skill">Fraud Detection</span>
-              <span class="skill">Exploratory</span>
-              <span class="skill">Flaky Fixing</span>
-            </div>
-          </div>
-        </div>
+<div id="voiceModal" onclick="if(event.target===this)closeVoiceModal()">
+  <div class="vm-card">
+    <div class="term-header">
+      <div class="term-dots">
+        <span class="tdot tdot-r"></span>
+        <span class="tdot tdot-y"></span>
+        <span class="tdot tdot-g"></span>
       </div>
-    </section>
+      <div class="term-title-bar">// MITCHELL_KLUGMAN.voice_intro.m4a<span class="term-cursor"></span></div>
+    </div>
+    <div class="vm-body">
+      <div class="vm-label">> TRANSCRIPT</div>
+      <div class="vm-text">Hi, I'm <strong>Mitchell Klugman</strong>, and I'm a <strong>QA Engineer</strong> focused on web, API, and automation testing.
 
-    <!-- ===== RESUME ===== -->
-    <section class="section" id="resume" data-stamp="RESUME">
-      <div class="container">
-        <div class="section__head reveal">
-          <h2 class="section__title">Resume</h2>
-          <p class="section__subtitle">
-            Experience, education, and tools I use daily.
-          </p>
-        </div>
+My approach to quality assurance is practical and product-focused. I'm interested not only in finding defects, but also in understanding system behavior, validating critical workflows, and helping teams release with confidence.
 
-        <div class="resume-grid">
-          <div class="card reveal" data-scroll3d>
-            <h3 class="card__title">Experience</h3>
+I have experience working with web applications, REST APIs, automation frameworks, SQL validation, and integration-heavy systems. My toolkit includes <strong>Selenium, TestNG, Postman, RestAssured, Jira, Jenkins, Allure</strong>, and DevTools.
 
-            <div class="timeline">
-              <article class="timeline__item">
-                <header class="timeline__head">
-                  <h4>QA Engineer (Automation / AI-focused) <span class="muted"> Web Design Sun</span></h4>
-                  <span class="pill">Remote • 2025–2026</span>
-                </header>
-                <ul class="check">
-                  <li>Owned quality validation for an AI text humanization system (Walter).</li>
-                  <li>Validated AI outputs for coherence, tone, relevance, and non-deterministic behavior.</li>
-                  <li>Performed exploratory/regression testing; documented expected behavior and defects in Jira.</li>
-                  <li>Conducted UI/UX testing from Figma designs; ensured responsive and cross-browser behavior.</li>
-                </ul>
-              </article>
+I've also worked with AI-driven functionality, payment-related scenarios, telemetry analysis, and cross-system troubleshooting, which helped me develop a stronger technical perspective as a QA Engineer.
 
-              <article class="timeline__item">
-                <header class="timeline__head">
-                  <h4>QA Automation Engineer <span class="muted"> NextGen QA Lab</span></h4>
-                  <span class="pill">Remote • 2023–2024</span>
-                </header>
-                <ul class="check">
-                  <li>Built and maintained a modular Selenium regression suite using Page Object Model.</li>
-                  <li>Implemented REST API automation with RestAssured (reusable request builders, schema validation).</li>
-                  <li>Integrated UI/API tests into Jenkins CI with Allure reporting for faster failure triage.</li>
-                  <li>Reduced flaky checks via better locators, waits, and test data handling.</li>
-                </ul>
-              </article>
-
-              <article class="timeline__item">
-                <header class="timeline__head">
-                  <h4>QA Automation Trainee <span class="muted"> Upteam QA Lab</span></h4>
-                  <span class="pill">Remote • 2025</span>
-                </header>
-                <ul class="check">
-                  <li>Performed API testing in Postman (positive/negative/boundary); logged defects in Jira.</li>
-                  <li>Supported Agile workflow and practiced Git + automation fundamentals.</li>
-                </ul>
-              </article>
-            </div>
-          </div>
-
-          <div class="stack-col">
-            <div class="card reveal" data-scroll3d>
-              <h3 class="card__title">Education &amp; Certifications</h3>
-              <ul class="list">
-                <li><strong>Kyiv International University</strong> — BSc Computer Science (Online), 2025</li>
-                <li><strong>Automated Quality Assurance</strong> — UpTeam GmbH (2025)</li>
-                <li><strong>QA Manual &amp; Automation Tester</strong> — AIT TR GmbH (2025)</li>
-              </ul>
-            </div>
-
-            <div class="card reveal" data-scroll3d>
-              <h3 class="card__title">Tools &amp; Tech</h3>
-              <div class="skills">
-                <span class="skill">Java (Core/OOP)</span>
-                <span class="skill">Python (basic)</span>
-                <span class="skill">SQL/MySQL</span>
-                <span class="skill">Selenium WebDriver</span>
-                <span class="skill">TestNG</span>
-                <span class="skill">Playwright (basic)</span>
-                <span class="skill">RestAssured</span>
-                <span class="skill">Postman</span>
-                <span class="skill">JSON/XML Validation</span>
-                <span class="skill">Jenkins</span>
-                <span class="skill">GitHub Actions</span>
-                <span class="skill">Allure</span>
-                <span class="skill">Jira</span>
-                <span class="skill">TestRail</span>
-                <span class="skill">Git</span>
-                <span class="skill">n8n</span>
-                <span class="skill">Grafana</span>
-                <span class="skill">Docker (basic)</span>
-                <span class="skill">Node.js (basic)</span>
-              </div>
-            </div>
-
-            <div class="card reveal" data-scroll3d>
-              <h3 class="card__title">Languages</h3>
-              <div class="skills">
-                <span class="skill">English (Fluent)</span>
-                <span class="skill">Ukrainian (Fluent)</span>
-                <span class="skill">Russian (Fluent)</span>
-                <span class="skill">Spanish (Basic)</span>
-              </div>
-            </div>
-          </div>
-        </div>
+I see QA as more than testing screens. For me, it's about improving product reliability, reducing risk, and making sure the final user experience is <strong>stable, clear, and trustworthy</strong>.</div>
+    </div>
+    <div class="vm-controls">
+      <button class="vm-playbtn" id="vmPlayBtn" onclick="vmTogglePlay()">▶</button>
+      <div class="vm-progress" id="vmProgress" onclick="vmSeek(event)">
+        <div class="vm-progress-fill" id="vmFill"></div>
       </div>
-    </section>
+      <span class="vm-time" id="vmTime">0:00</span>
+      <button class="vm-close-btn" onclick="closeVoiceModal()">✕ CLOSE</button>
+    </div>
+  </div>
+</div>
 
-    <!-- ===== EXTENDED EXPERIENCE ===== -->
-    <section class="section" id="experience" data-stamp="EXPERIENCE">
-      <div class="container">
-        <div class="section__head reveal">
-          <h2 class="section__title">Beyond Standard QA</h2>
-          <p class="section__subtitle">
-            Hands-on work in fraud analytics, operational automation, and monitoring — applied in production on high-traffic platforms.
-          </p>
-        </div>
+<audio id="voiceAudio" preload="auto"><source src="30-03-2026 13.39.m4a" type="audio/mp4"></audio>
 
-        <div class="ext-grid">
-          <div class="ext-card reveal" data-scroll3d>
-            <div class="ext-card__icon" aria-hidden="true">🔍</div>
-            <h3 class="ext-card__title">Fraud Detection &amp; Analytics</h3>
-            <p class="ext-card__text">
-              Built multi-account detection logic using browser fingerprint, IP, and subnet signals with a weighted confidence scoring model.
-              Investigated telemetry gaps, anomalous registration behavior, and suspicious activity patterns on high-traffic online platforms.
-              Produced scored alerts at two severity levels, validated against live fraud cases.
-            </p>
-            <div class="ext-tags">
-              <span class="ext-badge">MySQL</span>
-              <span class="ext-badge">Fingerprinting</span>
-              <span class="ext-badge">Telemetry</span>
-              <span class="ext-badge">Anomaly detection</span>
-              <span class="ext-badge">Scoring models</span>
-            </div>
-          </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ══════════════════════════════════════════════════════
+//  Mitchell Klugman — 3D World Portfolio  FINAL
+//  Fix: cards fade-in on approach, orb always visible,
+//       boot sequence, proper scroll, all clicks work
+// ══════════════════════════════════════════════════════
 
-          <div class="ext-card reveal" data-scroll3d>
-            <div class="ext-card__icon" aria-hidden="true">⚙️</div>
-            <h3 class="ext-card__title">Workflow &amp; Integration Automation</h3>
-            <p class="ext-card__text">
-              Designed and maintained n8n workflows integrating Chatwoot, Slack, Google Sheets, and MySQL into unified operational pipelines.
-              Implemented deduplication and state-handling logic to eliminate duplicate alerts.
-              Built auto-translation pipelines and customer support bot workflows across multiple brands.
-            </p>
-            <div class="ext-tags">
-              <span class="ext-badge">n8n</span>
-              <span class="ext-badge">Chatwoot</span>
-              <span class="ext-badge">Slack</span>
-              <span class="ext-badge">Google Sheets</span>
-              <span class="ext-badge">MySQL</span>
-              <span class="ext-badge">Node.js</span>
-            </div>
-          </div>
+// ── Boot sequence ────────────────────────────────────
+const BOOT_LINES = [
+  '> INITIALIZING QA_PORTFOLIO v4.0...',
+  '> LOADING: Selenium · RestAssured · TestNG',
+  '> MOUNTING: Fraud analytics engine',
+  '> CONNECTING: Grafana · MySQL · n8n',
+  '> DEPLOYING: 5 production projects',
+  '> WORLD READY. START SCROLLING. ✓',
+];
+let bLine=0, bChar=0, bDone=false;
+const bText=document.getElementById('boot-text');
+const bBar=document.getElementById('bbar');
 
-          <div class="ext-card reveal" data-scroll3d>
-            <div class="ext-card__icon" aria-hidden="true">📊</div>
-            <h3 class="ext-card__title">SQL Analytics &amp; Monitoring</h3>
-            <p class="ext-card__text">
-              Wrote complex SQL queries across partitioned datasets for operational and telemetry analysis.
-              Built Grafana dashboards for support monitoring, conversation volume, agent KPIs, and anomaly tracking.
-              Validated payment-related flows including failed and pending transaction edge cases across integration-heavy admin systems.
-            </p>
-            <div class="ext-tags">
-              <span class="ext-badge">Grafana</span>
-              <span class="ext-badge">SQL/MySQL</span>
-              <span class="ext-badge">Payment QA</span>
-              <span class="ext-badge">Dashboards</span>
-              <span class="ext-badge">KPI tracking</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+function typeBoot(){
+  if(bDone) return;
+  if(bLine>=BOOT_LINES.length){
+    bDone=true;
+    setTimeout(()=>{
+      document.getElementById('boot').classList.add('done');
+      document.getElementById('hero').classList.add('show');
+      setTimeout(()=>document.getElementById('boot').style.display='none',700);
+    },500);
+    return;
+  }
+  const line=BOOT_LINES[bLine];
+  if(bChar<line.length){
+    bText.textContent+=line[bChar];
+    bChar++;
+    bBar.style.width=((bLine/BOOT_LINES.length+bChar/(line.length*BOOT_LINES.length))*100).toFixed(1)+'%';
+    setTimeout(typeBoot, line[bChar-1]==='.'?60:28);
+  } else {
+    bText.textContent+='\n';
+    bLine++;bChar=0;
+    setTimeout(typeBoot,180);
+  }
+}
+typeBoot();
 
-    <!-- ===== PROJECTS ===== -->
-    <section class="section" id="projects" data-stamp="PROJECTS">
-      <div class="container">
-        <div class="section__head reveal">
-          <h2 class="section__title">Projects</h2>
-          <p class="section__subtitle">
-            Selected QA automation work and tooling examples.
-          </p>
-        </div>
+// ── Data ─────────────────────────────────────────────
+const PROJ=[
+  {
+    name:'API Automation Framework',badge:'JAVA',impact:'CI-READY',
+    tech:['Java','RestAssured','Jenkins','Allure','JSON Schema'],
+    why:"Most API test suites are messy one-offs. I built this as a proper framework — modular, reusable, and wired into CI so the team gets instant feedback on every push.",
+    desc:'Reusable auth + request builders, JSON schema contract validation, smoke and regression runs integrated into Jenkins with Allure reports. Built to scale — not just to run once.',
+    url:'https://github.com/termenator46/amr-fleet',side:1,wz:16
+  },
+  {
+    name:'UI Selenium Suite',badge:'SELENIUM',impact:'STABLE',
+    tech:['Selenium WebDriver','TestNG','Page Object Model','Java'],
+    why:"Flaky tests destroy trust in automation. My suite enforces strict locator discipline and proper wait strategies so it stays green over months.",
+    desc:'Page Object + Data Builder architecture, stable waits, reliable locators, CI-friendly Allure reporting. Built for long-term regression reliability — not short-term demos.',
+    url:'https://github.com/termenator46/qa-utils',side:-1,wz:6
+  },
+  {
+    name:'Fraud Intelligence Dashboard',badge:'ANALYTICS',impact:'PRODUCTION',
+    tech:['JavaScript','Fingerprinting','MySQL','Webhooks'],
+    why:"This ran on real high-traffic platforms catching real fraud. I designed the scoring model, built the UI, and validated it against confirmed live abuse cases.",
+    desc:'Multi-account detection: FP×50% + IP×30% + SUB×20% weighted confidence. Live alert triage with detail panels, severity filters, signal breakdown — deployed in production.',
+    url:'https://github.com/termenator46/fraud-intelligence-dashboard',side:1,wz:-5
+  },
+  {
+    name:'AI Output Validation Playbook',badge:'AI QA',impact:'REPEATABLE',
+    tech:['Exploratory Testing','Regression','Edge Cases','Jira'],
+    why:"AI features break differently — you can't just assert equals. I built a methodology specifically for LLM-powered products that teams can actually follow.",
+    desc:'Structured checklist for evaluating non-deterministic AI outputs: coherence, tone, relevance, and regression signals across iterative model releases.',
+    url:'https://github.com/termenator46/slam-demo',side:-1,wz:-15
+  },
+  {
+    name:'Grafana QA Monitoring Suite',badge:'GRAFANA',impact:'3 BRANDS',
+    tech:['Grafana','MySQL','SQL','Chatwoot'],
+    why:"I didn't just set up dashboards — I solved cross-instance isolation, fixed $__timeFilter() edge cases, and made three separate databases look like one.",
+    desc:'Multi-instance monitoring: conversation volume, agent KPIs, anomaly detection (spikes, no-reply, telemetry gaps) — fully battle-tested across 3 production brands.',
+    url:'https://github.com/termenator46/grafana-qa-monitoring',side:1,wz:-25
+  }
+];
 
-        <div class="projects">
-          <article class="project-card tilt reveal" data-tilt data-tilt-max="8" data-scroll3d>
-            <div class="project-card__top">
-              <h3>API Automation Framework</h3>
-              <span class="badge">Java</span>
-            </div>
-            <p>
-              REST API test framework with reusable auth + request builders, schema validation, and smoke/regression runs wired into CI.
-            </p>
-            <div class="meta">
-              <span class="tag">RestAssured</span>
-              <span class="tag">Jenkins</span>
-              <span class="tag">Allure</span>
-              <span class="tag">JSON Schema</span>
-            </div>
-            <div class="links">
-              <a href="https://github.com/termenator46/amr-fleet" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-            </div>
-          </article>
+const EXP=[
+  {icon:'🔍',title:'Fraud Detection',hook:'Built real anti-fraud logic. Not academic.',
+   pts:['Weighted scoring: FP×50% + IP×30% + SUB×20%','Multi-account cluster detection in real-time','Telemetry gap & anomalous registration analysis','Validated against confirmed live fraud cases'],
+   tags:['MySQL','Fingerprinting','Telemetry','Anomaly']},
+  {icon:'⚙️',title:'Workflow Automation',hook:'I automate whole operations, not just tests.',
+   pts:['n8n: Chatwoot → Slack → MySQL → Sheets','Auto-translation for multiple brand instances','Dedup & state-handling to reduce alert noise','Support bots with multi-step escalation logic'],
+   tags:['n8n','Chatwoot','Slack','MySQL','Node.js']},
+  {icon:'📊',title:'SQL Analytics & Payments',hook:'SQL that answers real business questions.',
+   pts:['Complex queries across partitioned datasets','Agent KPI dashboards for 3 live brands','Payment QA: failed/pending edge case analysis','Webhook & callback delivery failure tracking'],
+   tags:['Grafana','SQL/MySQL','Payment QA','Docker']}
+];
 
-          <article class="project-card tilt reveal" data-tilt data-tilt-max="8" data-scroll3d>
-            <div class="project-card__top">
-              <h3>UI Selenium Test Suite</h3>
-              <span class="badge">Selenium</span>
-            </div>
-            <p>
-              Page Object + Data Builder architecture, stable waits, and CI-friendly reporting focused on long-term reliability and low maintenance.
-            </p>
-            <div class="meta">
-              <span class="tag">Java</span>
-              <span class="tag">Selenium</span>
-              <span class="tag">TestNG</span>
-              <span class="tag">POM</span>
-            </div>
-            <div class="links">
-              <a href="https://github.com/termenator46/qa-utils" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-            </div>
-          </article>
+const JOBS=[
+  {
+    company:'Web Design Sun',role:'QA Engineer (AI / Automation)',
+    dates:'2025–2026',
+    pts:[
+      'Validated AI-driven features: consistency, edge cases, non-deterministic outputs',
+      'Regression & exploratory testing for fast-changing web releases',
+      'UI/UX verification against Figma designs, cross-browser checks',
+      'Collaborated with devs on fix verification and release confidence'
+    ],
+    tags:['AI QA','Figma','Cross-browser','Regression','Jira']
+  },
+  {
+    company:'NextGen QA Lab',role:'QA Automation Engineer',
+    dates:'2023–2024',
+    pts:[
+      'Built modular Selenium suite (Page Object Model) for scalable UI automation',
+      'REST API automation with RestAssured — reusable builders + validation checks',
+      'Jenkins CI pipelines with Allure reporting for clear failure visibility',
+      'Improved stability: better waits, locators, and test data handling'
+    ],
+    tags:['Selenium','RestAssured','Jenkins','Allure','POM']
+  },
+  {
+    company:'Upteam QA Lab',role:'QA Automation Trainee · Internship',
+    dates:'2025',
+    pts:[
+      'API testing in Postman: positive, negative, boundary, and edge-case scenarios',
+      'Defect logging in Jira with reproducible steps, expected vs actual, and severity tags',
+      'Executed structured manual test cases for web UI features across major browsers',
+      'Wrote test checklists and test plans; participated in sprint demos and bug triage',
+      'Gained hands-on exposure to CI basics and team QA workflows in agile environment'
+    ],
+    tags:['Postman','Jira','API Testing','Manual QA','Test Planning']
+  }
+];
 
-          <article class="project-card tilt reveal" data-tilt data-tilt-max="8" data-scroll3d>
-            <div class="project-card__top">
-              <h3>AI Output Validation Playbook</h3>
-              <span class="badge">QA</span>
-            </div>
-            <p>
-              A practical checklist for evaluating non-deterministic AI outputs: coherence, tone, relevance, and regression signals across iterative model changes.
-            </p>
-            <div class="meta">
-              <span class="tag">Exploratory</span>
-              <span class="tag">Regression</span>
-              <span class="tag">Edge cases</span>
-              <span class="tag">Jira</span>
-            </div>
-            <div class="links">
-              <a href="https://github.com/termenator46/slam-demo" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-            </div>
-          </article>
+// ── Three.js setup ────────────────────────────────────
+const cvs=document.getElementById('c');
+let VW=innerWidth, VH=innerHeight;
+const renderer=new THREE.WebGLRenderer({canvas:cvs,antialias:true});
+renderer.setSize(VW,VH);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 
-          <article class="project-card tilt reveal" data-tilt data-tilt-max="8" data-scroll3d>
-            <div class="project-card__top">
-              <h3>Fraud Intelligence Dashboard</h3>
-              <span class="badge">Analytics</span>
-            </div>
-            <p>
-              HTML tool for fingerprint-based fraud analysis with webhook data loading, confidence scoring, and frontend ref filtering. Built for production use on real platform data.
-            </p>
-            <div class="meta">
-              <span class="tag">JavaScript</span>
-              <span class="tag">Fingerprinting</span>
-              <span class="tag">MySQL</span>
-              <span class="tag">Webhooks</span>
-            </div>
-            <div class="links">
-              <a href="https://github.com/termenator46/fraud-intelligence-dashboard" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-              <a href="https://termenator46.github.io/fraud-intelligence-dashboard/" target="_blank" rel="noopener noreferrer">Live Demo ↗</a>
-            </div>
-          </article>
+const scene=new THREE.Scene();
+// Denser fog so cards only appear when camera is close
+scene.fog=new THREE.FogExp2(0x020805,0.014);
+scene.background=new THREE.Color(0x020805);
 
-          <article class="project-card tilt reveal" data-tilt data-tilt-max="8" data-scroll3d>
-            <div class="project-card__top">
-              <h3>Grafana QA Monitoring Suite</h3>
-              <span class="badge">Grafana</span>
-            </div>
-            <p>
-              Multi-instance Grafana dashboards for support monitoring, agent KPIs, conversation volume, and anomaly detection — deployed across multiple production brands.
-            </p>
-            <div class="meta">
-              <span class="tag">Grafana</span>
-              <span class="tag">MySQL</span>
-              <span class="tag">SQL</span>
-              <span class="tag">Chatwoot</span>
-            </div>
-            <div class="links">
-              <a href="https://github.com/termenator46/grafana-qa-monitoring" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
+// Sky + card glow gradient colors per section
+const SKY_STOPS=[
+  {t:0,   r:0x03,g:0x14,b:0x09, lr:0x00,lg:0xff,lb:0x88}, // HERO       — vivid emerald
+  {t:0.15,r:0x02,g:0x10,b:0x1e, lr:0x00,lg:0xe0,lb:0xff}, // WHO AM I   — electric cyan
+  {t:0.35,r:0x03,g:0x07,b:0x24, lr:0x44,lg:0x99,lb:0xff}, // PROJECTS   — deep electric blue
+  {t:0.55,r:0x16,g:0x09,b:0x01, lr:0xff,lg:0xbb,lb:0x00}, // BEYOND QA  — amber gold
+  {t:0.72,r:0x02,g:0x1a,b:0x0e, lr:0x00,lg:0xff,lb:0xaa}, // EXPERIENCE — bright emerald
+  {t:0.94,r:0x18,g:0x04,b:0x02, lr:0xff,lg:0x55,lb:0x11}, // CONTACT    — fire red
+  {t:1.0, r:0x18,g:0x04,b:0x02, lr:0xff,lg:0x55,lb:0x11},
+];
+function skyAtT(t){
+  let a=SKY_STOPS[0],b=SKY_STOPS[1];
+  for(let i=0;i<SKY_STOPS.length-1;i++){
+    if(t>=SKY_STOPS[i].t&&t<=SKY_STOPS[i+1].t){a=SKY_STOPS[i];b=SKY_STOPS[i+1];break;}
+  }
+  const f=(t-a.t)/Math.max(b.t-a.t,0.001);
+  return {
+    r:Math.round(a.r+(b.r-a.r)*f),
+    g:Math.round(a.g+(b.g-a.g)*f),
+    b:Math.round(a.b+(b.b-a.b)*f),
+    lr:Math.round(a.lr+(b.lr-a.lr)*f),
+    lg:Math.round(a.lg+(b.lg-a.lg)*f),
+    lb:Math.round(a.lb+(b.lb-a.lb)*f),
+  };
+}
+let curGlowColor=new THREE.Color(0x22d07a);
+const _cardTint=new THREE.Color();
+const _glowFull=new THREE.Color();
 
-    <!-- ===== CONTACT ===== -->
-    <section class="section" id="contact" data-stamp="CONTACT">
-      <div class="container">
-        <div class="section__head reveal">
-          <h2 class="section__title">Contact</h2>
-          <p class="section__subtitle">
-            Send a message. The form will deliver it to <strong>mitcel258@gmail.com</strong>.
-          </p>
-        </div>
+const cam=new THREE.PerspectiveCamera(62,VW/VH,.1,500);
+cam.position.set(0,2.8,60);
+cam.lookAt(0,2,50);
 
-        <div class="contact-grid">
-          <form class="card contact-form reveal" id="contactForm"
-                action="https://formsubmit.co/mitcel258@gmail.com" method="POST"
-                novalidate data-scroll3d data-formsubmit="true">
+// Lights
+const ambLight=new THREE.AmbientLight(0x0d1f0d,2.8);scene.add(ambLight);
+const sun=new THREE.DirectionalLight(0x22d07a,.6);
+sun.position.set(5,30,10);scene.add(sun);
 
-            <input type="hidden" name="_subject" value="New message from QA Portfolio">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" id="formNext" name="_next" value="https://termenator46.github.io/portfolio-/?sent=1#contact">
+// Grid
+const gA=new THREE.GridHelper(600,90,0x22d07a,0x0a2010);
+gA.material.opacity=.24;gA.material.transparent=true;scene.add(gA);
+const gB=new THREE.GridHelper(600,18,0x22d07a,0x22d07a);
+gB.material.opacity=.045;gB.material.transparent=true;gB.position.y=.02;scene.add(gB);
 
-            <div class="field">
-              <label for="name">Name</label>
-              <input id="name" name="name" type="text" autocomplete="name" required maxlength="80" placeholder="Your name" />
-              <small class="error" data-error-for="name"></small>
-            </div>
+// Stars
+(()=>{
+  const N=3000,g=new THREE.BufferGeometry(),p=new Float32Array(N*3);
+  for(let i=0;i<N;i++){p[i*3]=(Math.random()-.5)*700;p[i*3+1]=8+Math.random()*120;p[i*3+2]=(Math.random()-.5)*700;}
+  g.setAttribute('position',new THREE.BufferAttribute(p,3));
+  scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:.1,transparent:true,opacity:.48})));
+})();
 
-            <div class="field">
-              <label for="email">Email</label>
-              <input id="email" name="email" type="email" autocomplete="email" required maxlength="120" placeholder="name@example.com" />
-              <small class="error" data-error-for="email"></small>
-            </div>
+// Rain
+const RN=1600,rnG=new THREE.BufferGeometry();
+const rnP=new Float32Array(RN*3),rnS=new Float32Array(RN);
+for(let i=0;i<RN;i++){
+  rnP[i*3]=(Math.random()-.5)*160;rnP[i*3+1]=Math.random()*35+.5;
+  rnP[i*3+2]=(Math.random()-.5)*220;rnS[i]=.013+Math.random()*.024;
+}
+rnG.setAttribute('position',new THREE.BufferAttribute(rnP,3));
+const rain=new THREE.Points(rnG,new THREE.PointsMaterial({color:0x22d07a,size:.09,transparent:true,opacity:.22}));
+scene.add(rain);
 
-            <div class="field">
-              <label for="company">Company</label>
-              <input id="company" name="company" type="text" autocomplete="organization" required maxlength="80" placeholder="Company (e.g. Acme Inc.)" />
-              <small class="error" data-error-for="company"></small>
-            </div>
+// ── Orbital orb character ─────────────────────────────
+const orbGrp=new THREE.Group();
+scene.add(orbGrp);
 
-            <div class="field hp" aria-hidden="true">
-              <label for="website">Website</label>
-              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
-            </div>
+// Core sphere
+orbGrp.add(new THREE.Mesh(
+  new THREE.SphereGeometry(.28,20,20),
+  new THREE.MeshStandardMaterial({color:0x22d07a,emissive:0x22d07a,emissiveIntensity:.6,roughness:.3})
+));
 
-            <div class="field">
-              <label for="message">Message</label>
-              <textarea id="message" name="message" rows="6" required maxlength="2000" placeholder="Type something..."></textarea>
-              <small class="error" data-error-for="message"></small>
-            </div>
+// Inner glow sphere
+orbGrp.add(Object.assign(new THREE.Mesh(
+  new THREE.SphereGeometry(.18,12,12),
+  new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.15})
+),{}));
 
-            <button class="btn primary full" type="submit" id="sendBtn">Send Message</button>
-            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-          </form>
+// 3 orbital rings (NOT inside group lookAt, so they spin independently)
+const orbRings=[];
+[{r:.62,t:.025,tilt:0},{r:.85,t:.018,tilt:Math.PI/3},{r:1.08,t:.013,tilt:-Math.PI/4}].forEach((cfg,i)=>{
+  const m=new THREE.Mesh(
+    new THREE.TorusGeometry(cfg.r,cfg.t,8,64),
+    new THREE.MeshBasicMaterial({color:0x22d07a,transparent:true,opacity:.42-i*.1})
+  );
+  m.rotation.x=cfg.tilt;
+  orbRings.push(m);
+  orbGrp.add(m);
+});
 
-          <aside class="card reveal" data-scroll3d>
-            <h3 class="card__title">Quick Contact</h3>
+// Orb light
+const orbLight=new THREE.PointLight(0x22d07a,3,10);
+orbGrp.add(orbLight);
 
-            <div class="quick">
-              <div class="quick__row">
-                <span class="quick__label">Email</span>
-                <a href="mailto:mitcel258@gmail.com">mitcel258@gmail.com</a>
-              </div>
-              <div class="quick__row">
-                <span class="quick__label">Phone</span>
-                <a href="tel:+380976707150">+380 97 670 7150</a>
-              </div>
-              <div class="quick__row">
-                <span class="quick__label">Location</span>
-                <span>EU Remote · Open to Relocation</span>
-              </div>
-            </div>
+// Set initial orb position so it's visible from start
+orbGrp.position.set(0,2.2,52);
 
-            <div class="divider"></div>
+// ── Camera path ───────────────────────────────────────
+const CAM=new THREE.CatmullRomCurve3([
+  new THREE.Vector3(0,2.8,60),
+  new THREE.Vector3(0,2.8,50),
+  new THREE.Vector3(0,2.8,38),
+  new THREE.Vector3(1,2.8,26),
+  new THREE.Vector3(-1,2.8,14),
+  new THREE.Vector3(0,2.8,2),
+  new THREE.Vector3(1.2,2.8,-10),
+  new THREE.Vector3(-1.2,2.8,-22),
+  new THREE.Vector3(0,2.8,-34),
+  new THREE.Vector3(0,2.8,-46),
+  new THREE.Vector3(0,2.8,-58),
+  new THREE.Vector3(0,2.8,-70),
+  new THREE.Vector3(0,2.8,-76),
+]);
 
-            <p class="micro">
-              Available for full-time EU remote roles and freelance projects.
-              Typical response within 24 hours.
-            </p>
-          </aside>
-        </div>
-      </div>
-    </section>
+// ── Canvas helpers ─────────────────────────────────────
+function rrect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+function wrap(ctx,txt,x,y,mw,lh,ml=3){
+  const ws=txt.split(' ');let ln='',n=0;
+  for(let i=0;i<ws.length;i++){
+    const t=ln+ws[i]+' ';
+    if(ctx.measureText(t).width>mw&&i>0){
+      if(n>=ml-1){ctx.fillText(ln+'…',x,y+n*lh);return;}
+      ctx.fillText(ln,x,y+n*lh);ln=ws[i]+' ';n++;
+    } else ln=t;
+  }
+  ctx.fillText(ln.trim(),x,y+n*lh);
+}
+function mkTex(fn){
+  const c=document.createElement('canvas');fn(c);
+  return new THREE.CanvasTexture(c);
+}
+function topGlow(ctx,W){
+  const g=ctx.createLinearGradient(0,0,W,0);
+  g.addColorStop(0,'transparent');g.addColorStop(.5,'rgba(34,208,122,.6)');g.addColorStop(1,'transparent');
+  ctx.strokeStyle=g;ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(0,2);ctx.lineTo(W,2);ctx.stroke();
+}
+function termBar(ctx,W){
+  ctx.fillStyle='rgba(10,38,18,.96)';ctx.fillRect(2,2,W-4,46);
+  [{c:'#ef4444'},{c:'#f59e0b'},{c:'#22c55e'}].forEach((d,i)=>{
+    ctx.fillStyle=d.c;ctx.beginPath();ctx.arc(20+i*24,25,7,0,Math.PI*2);ctx.fill();
+  });
+}
 
-    <footer class="footer">
-      <div class="container footer__inner">
-        <span>© <span id="year"></span> Mitchell Klugman</span>
-        <a href="#home" class="back-top">Back to top ↑</a>
-      </div>
-    </footer>
+// ── Project card ──────────────────────────────────────
+function mkProjCard(p){
+  return mkTex(c=>{
+    const W=700,H=480;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');
+    rrect(ctx,0,0,W,H,22);
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#0d2016');bg.addColorStop(1,'#040a06');
+    ctx.fillStyle=bg;ctx.fill();
+    rrect(ctx,1.5,1.5,W-3,H-3,21);
+    ctx.strokeStyle='rgba(34,208,122,.62)';ctx.lineWidth=2;ctx.stroke();
+    topGlow(ctx,W);termBar(ctx,W);
+    ctx.fillStyle='rgba(195,240,215,.2)';ctx.font='12px monospace';
+    ctx.textAlign='center';ctx.fillText('~/qa-portfolio/'+p.name.replace(/ /g,'_').toLowerCase()+'.test',W/2,32);ctx.textAlign='left';
+    // Badges
+    ctx.font='bold 12px monospace';
+    let bx=W-12;
+    [{l:p.impact,fc:'#38d5ff',bg:'rgba(56,213,255,.1)',bc:'rgba(56,213,255,.32)'},
+     {l:p.badge,fc:'#22d07a',bg:'rgba(34,208,122,.1)',bc:'rgba(34,208,122,.32)'}].forEach(b=>{
+      const bw=ctx.measureText(b.l).width+22;bx-=bw+6;
+      rrect(ctx,bx,60,bw,26,5);ctx.fillStyle=b.bg;ctx.fill();
+      ctx.strokeStyle=b.bc;ctx.lineWidth=1;ctx.stroke();
+      ctx.fillStyle=b.fc;ctx.fillText(b.l,bx+11,77);
+    });
+    ctx.fillStyle='#fff';ctx.font='bold 26px sans-serif';ctx.fillText(p.name,22,110);
+    ctx.fillStyle='rgba(56,213,255,.68)';ctx.font='italic 13px Georgia,serif';
+    ctx.fillText('"'+p.why.slice(0,80)+(p.why.length>80?'…':'')+'"',22,138);
+    ctx.strokeStyle='rgba(34,208,122,.12)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(22,158);ctx.lineTo(W-22,158);ctx.stroke();
+    ctx.fillStyle='rgba(195,240,215,.72)';ctx.font='15px monospace';
+    wrap(ctx,p.desc,22,184,W-44,26,3);
+    ctx.strokeStyle='rgba(34,208,122,.1)';
+    ctx.beginPath();ctx.moveTo(22,278);ctx.lineTo(W-22,278);ctx.stroke();
+    let tx=22;ctx.font='bold 12px monospace';
+    p.tech.forEach(t=>{
+      const tw=ctx.measureText(t).width+20;
+      rrect(ctx,tx,288,tw,27,5);ctx.fillStyle='rgba(34,208,122,.09)';ctx.fill();
+      ctx.strokeStyle='rgba(34,208,122,.24)';ctx.lineWidth=1;ctx.stroke();
+      ctx.fillStyle='#22d07a';ctx.fillText(t,tx+10,306);tx+=tw+7;
+    });
+    ctx.fillStyle='rgba(34,208,122,.48)';ctx.font='13px monospace';
+    ctx.fillText('› CLICK TO EXPAND  ·  github.com/termenator46',22,H-22);
+    const bg2=ctx.createLinearGradient(0,0,W,0);
+    bg2.addColorStop(0,'transparent');bg2.addColorStop(.5,'rgba(34,208,122,.55)');bg2.addColorStop(1,'transparent');
+    ctx.strokeStyle=bg2;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(0,H-3);ctx.lineTo(W,H-3);ctx.stroke();
+  });
+}
 
-    <button class="to-top" id="toTop" type="button" aria-label="Back to top">
-      ↑
-    </button>
-  </main>
+// ── About card ────────────────────────────────────────
+function mkAboutCard(){
+  return mkTex(c=>{
+    const W=760,H=520;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');
+    rrect(ctx,0,0,W,H,22);
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#0e2418');bg.addColorStop(1,'#040a06');
+    ctx.fillStyle=bg;ctx.fill();
+    rrect(ctx,1.5,1.5,W-3,H-3,21);
+    ctx.strokeStyle='rgba(34,208,122,.6)';ctx.lineWidth=2;ctx.stroke();
+    topGlow(ctx,W);termBar(ctx,W);
+    ctx.fillStyle='rgba(195,240,215,.2)';ctx.font='12px monospace';
+    ctx.textAlign='center';ctx.fillText('~/mitchell_klugman/about.md',W/2,32);ctx.textAlign='left';
+    ctx.fillStyle='#22d07a';ctx.font='bold 14px monospace';ctx.fillText('> whoami',22,82);
+    ctx.fillStyle='#fff';ctx.font='bold 30px "DM Serif Display",serif';ctx.fillText('Mitchell Klugman',22,118);
+    ctx.fillStyle='rgba(195,240,215,.5)';ctx.font='14px monospace';
+    ctx.fillText('QA Automation Engineer (SDET)  ·  EU Remote  ·  Open to Relocation',22,146);
+    ctx.strokeStyle='rgba(34,208,122,.14)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(22,164);ctx.lineTo(W-22,164);ctx.stroke();
+    ctx.fillStyle='#22d07a';ctx.font='bold 13px monospace';ctx.fillText('> cat value_proposition.txt',22,188);
+    ctx.fillStyle='rgba(255,255,255,.8)';ctx.font='15px monospace';
+    wrap(ctx,'Most QA engineers test what was built. I also build the systems that make quality measurable — fraud detection, operational dashboards, and automation pipelines running in production.',22,212,W-44,26,3);
+    ctx.strokeStyle='rgba(34,208,122,.1)';
+    ctx.beginPath();ctx.moveTo(22,290);ctx.lineTo(W-22,290);ctx.stroke();
+    ctx.fillStyle='#22d07a';ctx.font='bold 13px monospace';ctx.fillText('> cat capabilities.json',22,312);
+    [['Testing:','Web UI · REST API · Smoke · Regression · Exploratory · AI outputs'],
+     ['Automation:','Selenium · TestNG · RestAssured · Playwright · Jenkins CI'],
+     ['Analytics:','SQL/MySQL · Grafana dashboards · Fraud scoring · Anomaly detection'],
+     ['Tooling:','n8n · Chatwoot · Docker · Node.js · Jira · Postman'],
+    ].forEach(([k,v],i)=>{
+      const y=336+i*36;
+      ctx.fillStyle='rgba(56,213,255,.7)';ctx.font='bold 13px monospace';ctx.fillText(k,36,y);
+      ctx.fillStyle='rgba(195,240,215,.65)';ctx.font='13px monospace';ctx.fillText(v,155,y);
+    });
+    ctx.fillStyle='rgba(34,208,122,.48)';ctx.font='13px monospace';
+    ctx.fillText('✓ English · Ukrainian · Russian (Fluent)  ·  Spanish (Basic)',22,H-22);
+  });
+}
 
-  <script src="script.js"></script>
+// ── Why hire me card ──────────────────────────────────
+function mkWhyCard(){
+  return mkTex(c=>{
+    const W=700,H=400;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');
+    rrect(ctx,0,0,W,H,22);
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#102018');bg.addColorStop(1,'#040a06');
+    ctx.fillStyle=bg;ctx.fill();
+    rrect(ctx,2,2,W-4,H-4,21);
+    ctx.strokeStyle='rgba(34,208,122,.7)';ctx.lineWidth=2.5;ctx.stroke();
+    topGlow(ctx,W);
+    ctx.fillStyle='#22d07a';ctx.font='bold 13px monospace';ctx.textAlign='center';
+    ctx.fillText('WHY CHOOSE MITCHELL?',W/2,36);ctx.textAlign='left';
+    ctx.strokeStyle='rgba(34,208,122,.14)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(22,54);ctx.lineTo(W-22,54);ctx.stroke();
+    ['QA + analytics + automation — all three in one engineer',
+     'I ship real production tools, not just test plans on paper',
+     'I own problems end-to-end: find it, fix it, measure it, monitor it',
+     'Strong defect reports that developers actually want to act on',
+     'Fast to ramp, comfortable in fast-moving ambiguous environments',
+    ].forEach((pt,i)=>{
+      const y=78+i*56;
+      rrect(ctx,22,y-20,W-44,44,8);ctx.fillStyle='rgba(34,208,122,.08)';ctx.fill();
+      ctx.strokeStyle='rgba(34,208,122,.18)';ctx.lineWidth=1;ctx.stroke();
+      ctx.fillStyle='#22d07a';ctx.font='bold 16px monospace';ctx.fillText('✓',34,y+5);
+      ctx.fillStyle='rgba(255,255,255,.82)';ctx.font='14px monospace';
+      wrap(ctx,pt,58,y+4,W-78,20,1);
+    });
+  });
+}
+
+// ── Experience card ───────────────────────────────────
+function mkExpCard(e){
+  return mkTex(c=>{
+    const W=590,H=390;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');
+    rrect(ctx,0,0,W,H,18);
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#0e201a');bg.addColorStop(1,'#040a06');
+    ctx.fillStyle=bg;ctx.fill();
+    rrect(ctx,1.5,1.5,W-3,H-3,17);
+    ctx.strokeStyle='rgba(34,208,122,.45)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='rgba(34,208,122,.1)';ctx.beginPath();ctx.arc(48,54,30,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='rgba(34,208,122,.28)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(48,54,30,0,Math.PI*2);ctx.stroke();
+    ctx.font='24px "Segoe UI Emoji","Apple Color Emoji",serif';ctx.textAlign='center';ctx.fillText(e.icon,48,63);ctx.textAlign='left';
+    ctx.fillStyle='#fff';ctx.font='bold 22px sans-serif';ctx.fillText(e.title,92,50);
+    ctx.fillStyle='rgba(56,213,255,.65)';ctx.font='italic 13px Georgia,serif';ctx.fillText(e.hook,92,72);
+    ctx.strokeStyle='rgba(34,208,122,.12)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(22,98);ctx.lineTo(W-22,98);ctx.stroke();
+    e.pts.forEach((pt,i)=>{
+      const y=122+i*34;
+      ctx.fillStyle='#22d07a';ctx.font='bold 15px monospace';ctx.fillText('›',22,y);
+      ctx.fillStyle='rgba(195,240,215,.72)';ctx.font='13px monospace';ctx.fillText(pt,44,y);
+    });
+    let tx=22;ctx.font='bold 11px monospace';
+    e.tags.forEach(t=>{
+      const tw=ctx.measureText(t).width+18;
+      rrect(ctx,tx,H-46,tw,26,5);ctx.fillStyle='rgba(34,208,122,.08)';ctx.fill();
+      ctx.strokeStyle='rgba(34,208,122,.22)';ctx.lineWidth=1;ctx.stroke();
+      ctx.fillStyle='#22d07a';ctx.fillText(t,tx+9,H-26);tx+=tw+6;
+    });
+  });
+}
+
+// ── Job card (Work Experience) ────────────────────────
+function mkJobCard(j){
+  return mkTex(c=>{
+    const W=700,H=182+j.pts.length*44+60;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');
+    rrect(ctx,0,0,W,H,22);
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#0d2016');bg.addColorStop(1,'#040a06');
+    ctx.fillStyle=bg;ctx.fill();
+    rrect(ctx,1.5,1.5,W-3,H-3,21);
+    ctx.strokeStyle='rgba(34,208,122,.62)';ctx.lineWidth=2;ctx.stroke();
+    topGlow(ctx,W);termBar(ctx,W);
+    // path in terminal bar
+    ctx.fillStyle='rgba(195,240,215,.2)';ctx.font='12px monospace';
+    ctx.textAlign='center';
+    ctx.fillText('~/experience/'+j.company.replace(/ /g,'_').toLowerCase()+'.json',W/2,32);
+    ctx.textAlign='left';
+    // dates badge
+    ctx.font='bold 11px monospace';
+    ctx.fillStyle='#22d07a';ctx.fillText(j.dates,22,76);
+    // remote badge
+    const bw=ctx.measureText('REMOTE').width+22;
+    rrect(ctx,W-bw-12,60,bw,24,5);
+    ctx.fillStyle='rgba(56,213,255,.1)';ctx.fill();
+    ctx.strokeStyle='rgba(56,213,255,.32)';ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle='#38d5ff';ctx.fillText('REMOTE',W-bw-1,76);
+    // company + role
+    ctx.fillStyle='#fff';ctx.font='bold 26px sans-serif';ctx.fillText(j.company,22,112);
+    ctx.fillStyle='rgba(195,240,215,.6)';ctx.font='14px monospace';ctx.fillText(j.role,22,138);
+    ctx.strokeStyle='rgba(34,208,122,.12)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(22,156);ctx.lineTo(W-22,156);ctx.stroke();
+    // bullet points
+    j.pts.forEach((pt,i)=>{
+      const y=182+i*42;
+      ctx.fillStyle='#22d07a';ctx.font='bold 14px monospace';ctx.fillText('›',22,y);
+      ctx.fillStyle='rgba(195,240,215,.72)';ctx.font='13px monospace';
+      wrap(ctx,pt,44,y,W-66,20,2);
+    });
+    // tech tags
+    let tx=22;ctx.font='bold 11px monospace';
+    j.tags.forEach(t=>{
+      const tw=ctx.measureText(t).width+18;
+      rrect(ctx,tx,H-46,tw,26,5);ctx.fillStyle='rgba(34,208,122,.09)';ctx.fill();
+      ctx.strokeStyle='rgba(34,208,122,.22)';ctx.lineWidth=1;ctx.stroke();
+      ctx.fillStyle='#22d07a';ctx.fillText(t,tx+9,H-26);tx+=tw+6;
+    });
+  });
+}
+
+// ── Sprites ───────────────────────────────────────────
+function mkSprite(tex,pos,sx,sy){
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,opacity:0}));
+  s.scale.set(sx,sy,1);s.position.copy(pos);scene.add(s);return s;
+}
+function sectionLabel(txt,pos){
+  const tex=mkTex(c=>{
+    const W=680,H=90;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');
+    ctx.globalAlpha=.5;ctx.fillStyle='#22d07a';
+    ctx.font='bold 50px monospace';ctx.textAlign='center';ctx.fillText(txt,W/2,66);
+  });
+  const s=mkSprite(tex,pos,12,2.2);allLabels.push(s);return s;
+}
+function quoteLabel(txt,pos){
+  const tex=mkTex(c=>{
+    const W=900,H=100;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');
+    ctx.globalAlpha=.7;ctx.fillStyle='#fff';
+    ctx.font='italic bold 38px "DM Serif Display",serif';
+    ctx.textAlign='center';ctx.fillText(txt,W/2,64);
+  });
+  const s=mkSprite(tex,pos,14,1.6);allLabels.push(s);return s;
+}
+function skillTag(txt,pos){
+  const tex=mkTex(c=>{
+    const W=320,H=58;c.width=W;c.height=H;
+    const ctx=c.getContext('2d');
+    rrect(ctx,1,1,W-2,H-2,11);
+    ctx.fillStyle='rgba(13,44,22,.9)';ctx.fill();
+    ctx.strokeStyle='rgba(34,208,122,.42)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='#22d07a';ctx.font='bold 21px monospace';
+    ctx.textAlign='center';ctx.fillText(txt,W/2,39);
+  });
+  const s=mkSprite(tex,pos,3.2,.82);allLabels.push(s);return s;
+}
+
+// ── Place card (fade-in on approach) ─────────────────
+const allCards=[];   // all card meshes for fade
+const allLabels=[];  // section labels + quotes — distance fade
+const clickables=[]; // only clickable cards
+
+function placeCard(tex,pos,rotY,sz,meta=null){
+  const mat=new THREE.MeshBasicMaterial({map:tex,transparent:true,side:THREE.DoubleSide,opacity:0,depthWrite:false});
+  const mesh=new THREE.Mesh(new THREE.PlaneGeometry(sz[0],sz[1]),mat);
+  mesh.position.copy(pos);mesh.rotation.y=rotY;mesh.userData.meta=meta;
+  scene.add(mesh);
+  allCards.push(mesh);
+  if(meta) clickables.push(mesh);
+  // Card point light (also fades)
+  const gl=new THREE.PointLight(0x22d07a,0,12);
+  gl.position.copy(pos);scene.add(gl);
+  mesh.userData.light=gl;
+  return mesh;
+}
+
+// Build world
+placeCard(mkAboutCard(), new THREE.Vector3(0,3.6,30),   0, [6.5,4.2]);
+placeCard(mkWhyCard(),   new THREE.Vector3(0,3.2,23),   0, [6.0,3.4]);
+
+PROJ.forEach(p=>{
+  const x=p.side*4, ry=p.side>0?-Math.PI*.14:Math.PI*.14;
+  placeCard(mkProjCard(p), new THREE.Vector3(x,3.3,p.wz), ry, [6.2,4.1], {type:'project',p});
+});
+
+EXP.forEach((e,i)=>{
+  const xs=[0,0,0],zs=[-29,-37,-45],ry=[0,0,0];
+  placeCard(mkExpCard(e), new THREE.Vector3(xs[i],3.1,zs[i]), ry[i], [5.2,3.3]);
+});
+
+// Work Experience cards
+JOBS.forEach((j,i)=>{
+  const pos=[{x:0,z:-52,ry:0},{x:0,z:-60,ry:0},{x:0,z:-68,ry:0}];
+  const cardH=182+j.pts.length*44+60;
+  const sy=6.2*(cardH/700);
+  placeCard(mkJobCard(j), new THREE.Vector3(pos[i].x,3.3,pos[i].z), pos[i].ry, [6.2,sy]);
+});
+
+// Section labels & quotes
+sectionLabel('// WHO AM I',    new THREE.Vector3(0,8.5,33));
+sectionLabel('// MY PROJECTS', new THREE.Vector3(0,8.5,12));
+sectionLabel('// BEYOND QA',   new THREE.Vector3(0,8.5,-22));
+sectionLabel('// EXPERIENCE',  new THREE.Vector3(0,8.5,-46));
+sectionLabel('// CONTACT',     new THREE.Vector3(0,8.5,-75));
+quoteLabel('"I build things that catch bugs before users do."', new THREE.Vector3(0,6.8,44));
+quoteLabel('"Click any glowing card to learn more."',          new THREE.Vector3(0,6.4,18));
+
+// Skill tags around about zone
+[{t:'Selenium',p:new THREE.Vector3(-9,5.5,31)},{t:'RestAssured',p:new THREE.Vector3(12,4.5,33)},
+ {t:'TestNG',  p:new THREE.Vector3(-8,3.8,35)},{t:'Jenkins CI',p:new THREE.Vector3(12,6,28)},
+ {t:'SQL/MySQL',p:new THREE.Vector3(-10,5,26)},{t:'Postman',   p:new THREE.Vector3(12,4,24)},
+ {t:'Grafana', p:new THREE.Vector3(7,5.2,21)}, {t:'n8n',       p:new THREE.Vector3(-7,5.8,22)},
+ {t:'Allure',  p:new THREE.Vector3(10,6.5,36)},
+].forEach(({t,p})=>skillTag(t,p));
+
+// Decorative rings
+const rings=[];
+[{z:33,x:-13},{z:12,x:14},{z:-7,x:-14},{z:-24,x:13},{z:-46,x:-12}].forEach((d,i)=>{
+  const m=new THREE.Mesh(
+    new THREE.TorusGeometry(.78+i*.09,.025,8,64),
+    new THREE.MeshBasicMaterial({color:0x22d07a,transparent:true,opacity:.14+i*.014})
+  );
+  m.position.set(d.x,3.2,d.z);m.rotation.x=Math.PI/2;
+  scene.add(m);rings.push(m);
+});
+
+// ── Contact zone transmission node ────────────────────
+const ctxNode=new THREE.Group();
+const ctxSphere=new THREE.Mesh(
+  new THREE.SphereGeometry(.26,18,18),
+  new THREE.MeshStandardMaterial({color:0xff5511,emissive:0xff5511,emissiveIntensity:.8,roughness:.2})
+);
+ctxNode.add(ctxSphere);
+const ctxRings=[];
+[{r:.75,t:.022,tx:0,ty:0},{r:1.05,t:.016,tx:Math.PI/3,ty:0},{r:1.38,t:.012,tx:-Math.PI/4,ty:Math.PI/5}].forEach((cfg,i)=>{
+  const m=new THREE.Mesh(
+    new THREE.TorusGeometry(cfg.r,cfg.t,8,64),
+    new THREE.MeshBasicMaterial({color:0xff5511,transparent:true,opacity:.52-i*.12})
+  );
+  m.rotation.x=cfg.tx;m.rotation.y=cfg.ty;
+  ctxRings.push(m);ctxNode.add(m);
+});
+const ctxLight=new THREE.PointLight(0xff5511,2.8,12);ctxNode.add(ctxLight);
+ctxNode.position.set(0,3,-85);
+scene.add(ctxNode);
+
+// ── Nav ───────────────────────────────────────────────
+document.querySelectorAll('nav button[data-goto]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const mx=document.documentElement.scrollHeight-innerHeight;
+    window.scrollTo({top:parseFloat(b.dataset.goto)*mx,behavior:'smooth'});
+  });
+});
+
+// ── Scroll ────────────────────────────────────────────
+let sT=0,tT=0,gridZ=60;
+window.addEventListener('scroll',()=>{
+  const mx=document.documentElement.scrollHeight-innerHeight;
+  if(mx>10) tT=Math.max(0,Math.min(1,scrollY/mx));
+},{passive:true});
+
+// ── Mouse ─────────────────────────────────────────────
+const mpos=new THREE.Vector2(-999,-999);
+const raycaster=new THREE.Raycaster();
+window.addEventListener('mousemove',e=>{mpos.x=(e.clientX/VW)*2-1;mpos.y=-(e.clientY/VH)*2+1;});
+
+// ── Click ─────────────────────────────────────────────
+window.addEventListener('scroll',()=>startAmbientMusic(),{once:true,passive:true});
+document.addEventListener('click',()=>startAmbientMusic(),{once:true});
+
+window.addEventListener('click',e=>{
+  if(clickLock) return;
+  if(e.target.closest('button,a,.mclose')) return;
+  if(document.getElementById('modal').classList.contains('on')) return;
+  raycaster.setFromCamera(mpos,cam);
+  const hits=raycaster.intersectObjects(clickables);
+  if(hits.length){
+    const m=hits[0].object.userData.meta;
+    if(m?.type==='project') openModal(m.p);
+  }
+});
+window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeCzone();closeVoiceModal();}});
+
+function openModal(p){
+  document.getElementById('mbody').innerHTML=`
+    <div class="mrow"><span class="mbadge">${p.badge}</span><span class="mimp">${p.impact}</span></div>
+    <h2 class="mtitle">${p.name}</h2>
+    <p class="mwhy">"${p.why}"</p>
+    <p class="mdesc">${p.desc}</p>
+    <div class="mtech">${p.tech.map(t=>`<span class="mchip">${t}</span>`).join('')}</div>
+  `;
+  document.getElementById('mgh').dataset.url=p.url;
+  document.getElementById('modal').classList.add('on');
+}
+let clickLock=false;
+function closeModal(){
+  document.getElementById('modal').classList.remove('on');
+  clickLock=true;
+  setTimeout(()=>{clickLock=false;},400);
+}
+
+function toggleVoice(e){
+  e.stopPropagation();
+  e.preventDefault();
+  document.getElementById('voiceModal').classList.add('on');
+  muteAmbient();
+  const audio=document.getElementById('voiceAudio');
+  audio.currentTime=0;
+  const p=audio.play();
+  if(p!==undefined) p.catch(()=>{});
+  vmSyncBtn(true);
+  vmSetupListeners();
+}
+function vmTogglePlay(){
+  const audio=document.getElementById('voiceAudio');
+  if(audio.paused){audio.play();vmSyncBtn(true);}
+  else{audio.pause();vmSyncBtn(false);}
+}
+function vmSyncBtn(playing){
+  const btn=document.getElementById('vmPlayBtn');
+  const hBtn=document.getElementById('voiceBtn');
+  btn.textContent=playing?'⏸':'▶';
+  btn.classList.toggle('playing',playing);
+  hBtn.textContent=playing?'⏸ PLAY VOICE INTRO':'♪ PLAY VOICE INTRO';
+  hBtn.classList.toggle('playing',playing);
+}
+function vmSetupListeners(){
+  const audio=document.getElementById('voiceAudio');
+  audio.ontimeupdate=()=>{
+    const pct=audio.duration?audio.currentTime/audio.duration*100:0;
+    document.getElementById('vmFill').style.width=pct+'%';
+    const s=Math.floor(audio.currentTime);
+    document.getElementById('vmTime').textContent=Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;
+  };
+  audio.onended=()=>{vmSyncBtn(false);document.getElementById('vmFill').style.width='0%';document.getElementById('vmTime').textContent='0:00';};
+}
+function vmSeek(e){
+  const audio=document.getElementById('voiceAudio');
+  if(!audio.duration) return;
+  const bar=document.getElementById('vmProgress');
+  const pct=e.offsetX/bar.offsetWidth;
+  audio.currentTime=pct*audio.duration;
+}
+function closeVoiceModal(){
+  document.getElementById('voiceModal').classList.remove('on');
+  const audio=document.getElementById('voiceAudio');
+  audio.pause();audio.currentTime=0;
+  vmSyncBtn(false);
+  unmuteAmbient();
+}
+
+// ── Ambient Music (Web Audio API) ─────────────────────
+let ambCtx=null,ambMaster=null,ambStarted=false,ambMuted=false,ambWarm=null,ambRev=null;
+
+function startAmbientMusic(){
+  if(ambStarted) return;
+  ambStarted=true;
+  try{
+    ambCtx=new(window.AudioContext||window.webkitAudioContext)();
+    ambCtx.resume();
+    ambMaster=ambCtx.createGain();
+    ambMaster.gain.setValueAtTime(0,ambCtx.currentTime);
+    ambMaster.gain.linearRampToValueAtTime(0.11,ambCtx.currentTime+5);
+    ambMaster.connect(ambCtx.destination);
+
+    // ── Reverb — three parallel feedback delays ────────
+    const revBus=ambCtx.createGain();revBus.gain.value=0.15;revBus.connect(ambMaster);
+    ambRev=revBus;
+    [[1.7,0.30],[2.6,0.22],[3.8,0.14]].forEach(([dt,fb])=>{
+      const d=ambCtx.createDelay(6);d.delayTime.value=dt;
+      const g=ambCtx.createGain();g.gain.value=fb;
+      d.connect(g);g.connect(d);g.connect(revBus);
+      revBus.connect(d);
+    });
+    function toReverb(node){const g=ambCtx.createGain();g.gain.value=0.35;node.connect(g);g.connect(revBus);}
+
+    // ── Main filter (gentle warmth) ────────────────────
+    const warm=ambCtx.createBiquadFilter();
+    warm.type='lowpass';warm.frequency.value=900;warm.Q.value=0.4;
+    warm.connect(ambMaster);
+    ambWarm=warm;
+    const lfo=ambCtx.createOscillator();
+    const lfoG=ambCtx.createGain();
+    lfo.frequency.value=0.02;lfoG.gain.value=260;
+    lfo.connect(lfoG);lfoG.connect(warm.frequency);lfo.start();
+
+    // ── Pad — Cmaj7 chord, detuned sine voices ─────────
+    // C2 E2 G2 B2  (65.4 82.4 98.0 123.5 Hz)
+    [[65.41,0.055],[82.41,0.045],[98.00,0.038],[123.47,0.028]].forEach(([f,vol])=>{
+      [-6,0,6].forEach(detune=>{
+        const o=ambCtx.createOscillator(),g=ambCtx.createGain();
+        o.type='sine';o.frequency.value=f;o.detune.value=detune;
+        g.gain.value=vol/3;
+        o.connect(g);g.connect(warm);toReverb(g);o.start();
+      });
+    });
+
+    // ── Sub bass — very quiet C1 pulse ─────────────────
+    const sub=ambCtx.createOscillator(),subG=ambCtx.createGain();
+    const subF=ambCtx.createBiquadFilter();subF.type='lowpass';subF.frequency.value=90;
+    sub.type='sine';sub.frequency.value=32.7;subG.gain.value=0.07;
+    sub.connect(subG);subG.connect(subF);subF.connect(ambMaster);sub.start();
+
+    // ── Melody — slow C major pentatonic arpeggio ──────
+    // C4  E4    G4    A4    C5    G4    E4    C4
+    const MEL=[261.63,329.63,392.00,440.00,523.25,392.00,329.63,261.63];
+    let mi=0;
+    (function nextNote(){
+      const freq=MEL[mi];mi=(mi+1)%MEL.length;
+      const o=ambCtx.createOscillator(),g=ambCtx.createGain();
+      const nf=ambCtx.createBiquadFilter();nf.type='lowpass';nf.frequency.value=3000;
+      o.type='sine';o.frequency.value=freq;
+      const t=ambCtx.currentTime;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(0.028,t+0.55);
+      g.gain.setValueAtTime(0.028,t+1.1);
+      g.gain.linearRampToValueAtTime(0,t+3.2);
+      o.connect(g);g.connect(nf);nf.connect(ambMaster);toReverb(nf);
+      o.start(t);o.stop(t+3.6);
+      setTimeout(nextNote,1900+Math.random()*1400);
+    })();
+
+    // ── High shimmer — G5 C6 E6 evolving pulses ────────
+    [[783.99,0],[1046.5,3500],[1318.5,7200]].forEach(([freq,startOff],i)=>{
+      const o=ambCtx.createOscillator(),g=ambCtx.createGain();
+      o.type='sine';o.frequency.value=freq;
+      g.gain.setValueAtTime(0,ambCtx.currentTime);
+      o.connect(g);g.connect(ambMaster);toReverb(g);o.start();
+      (function pulse(){
+        const t=ambCtx.currentTime;
+        g.gain.setValueAtTime(0,t);
+        g.gain.linearRampToValueAtTime(0.006-i*0.0015,t+3.5);
+        g.gain.linearRampToValueAtTime(0,t+9);
+        setTimeout(pulse,12000+i*2800+Math.random()*3000);
+      })();
+    });
+
+  }catch(e){}
+}
+
+function muteAmbient(){
+  if(!ambMaster)return;
+  ambMuted=true;
+  ambMaster.gain.linearRampToValueAtTime(0,ambCtx.currentTime+0.8);
+}
+function unmuteAmbient(){
+  if(!ambMaster||!ambMuted)return;
+  ambMuted=false;
+  ambMaster.gain.linearRampToValueAtTime(0.07,ambCtx.currentTime+1.5);
+}
+function toggleAmbient(){
+  if(!ambMaster)return;
+  if(ambMuted){ambMuted=false;ambMaster.gain.linearRampToValueAtTime(0.07,ambCtx.currentTime+1);document.getElementById('muteBtn').textContent='♪';}
+  else{ambMuted=true;ambMaster.gain.linearRampToValueAtTime(0,ambCtx.currentTime+0.5);document.getElementById('muteBtn').textContent='♪ off';}
+}
+
+function openCzone(){
+  document.getElementById('czone').classList.add('on');
+  if(czoneAnimated) return;
+  czoneAnimated=true;
+  const seq=document.getElementById('termSeq');
+  const target=document.getElementById('termReady');
+  seq.innerHTML='';target.textContent='';
+  const STEPS=[
+    {text:'$ ESTABLISHING_SECURE_CONNECTION...',cls:'tseq-cmd',pause:850},
+    {text:'$ PING mitchell@remote.eu ... OK ✓', cls:'tseq-ok', pause:650},
+    {text:'$ AUTH_KEY: verified ✓',             cls:'tseq-ok', pause:400},
+  ];
+  function typeLine(text,cls,cb){
+    const el=document.createElement('div');
+    el.className='tseq-line '+cls;
+    seq.appendChild(el);
+    let i=0;
+    const iv=setInterval(()=>{el.textContent+=text[i];i++;if(i>=text.length){clearInterval(iv);if(cb)cb();}},28);
+  }
+  function runStep(i){
+    if(i>=STEPS.length){
+      setTimeout(()=>{
+        const txt='READY TO TALK?';let j=0;
+        const tw=setInterval(()=>{target.textContent+=txt[j];j++;if(j>=txt.length)clearInterval(tw);},55);
+        document.querySelectorAll('#termLinks li').forEach((li,idx)=>setTimeout(()=>li.classList.add('show'),400+idx*150));
+      },200);
+      return;
+    }
+    typeLine(STEPS[i].text,STEPS[i].cls,()=>setTimeout(()=>runStep(i+1),STEPS[i].pause));
+  }
+  setTimeout(()=>runStep(0),250);
+}
+function closeCzone(){
+  document.getElementById('czone').classList.remove('on');
+}
+
+// ── HUD refs ──────────────────────────────────────────
+const heroEl=document.getElementById('hero');
+const shEl  =document.getElementById('shint');
+const pfEl  =document.getElementById('pfill');
+const crdEl =document.getElementById('coords');
+const secEl =document.getElementById('sidelbl');
+const chipEl=document.getElementById('zchip');
+const czEl  =document.getElementById('czone');
+const hintEl=document.getElementById('hint');
+
+// ── Clock ─────────────────────────────────────────────
+const clock=new THREE.Clock();
+let curZone='HERO',czShown=false,czoneAnimated=false;
+const lookTarget=new THREE.Vector3();
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+// ── Render loop ───────────────────────────────────────
+function loop(){
+  requestAnimationFrame(loop);
+  const dt=clock.getDelta(),et=clock.getElapsedTime();
+
+  sT+=(tT-sT)*.032;
+
+  // Dynamic sky + glow
+  const sky=skyAtT(sT);
+  const skyHex=(sky.r<<16)|(sky.g<<8)|sky.b;
+  scene.background.setHex(skyHex);
+  scene.fog.color.setHex(skyHex);
+  const glowHex=(sky.lr<<16)|(sky.lg<<8)|sky.lb;
+  _glowFull.setHex(glowHex);
+  curGlowColor.lerp(_glowFull,0.04);
+  sun.color.lerp(curGlowColor,0.03);
+  ambLight.color.lerp(curGlowColor,0.02);
+
+  // Music evolves with scroll — filter + reverb per zone
+  if(ambWarm&&ambCtx){
+    // cutoff: Hero=320 About=600 Projects=1100 BeyondQA=200 Experience=500 Contact=1600
+    // reverb: Hero=0.10 About=0.20 Projects=0.28 BeyondQA=0.55 Experience=0.30 Contact=0.45
+    const MC=[
+      {t:0,   c:320, r:0.10},
+      {t:0.18,c:600, r:0.20},
+      {t:0.36,c:1100,r:0.28},
+      {t:0.55,c:200, r:0.55},
+      {t:0.72,c:500, r:0.30},
+      {t:0.94,c:1600,r:0.45},
+      {t:1,   c:1600,r:0.45},
+    ];
+    let ma=MC[0],mb=MC[1];
+    for(let i=0;i<MC.length-1;i++){if(sT>=MC[i].t&&sT<=MC[i+1].t){ma=MC[i];mb=MC[i+1];break;}}
+    const mf=(sT-ma.t)/Math.max(mb.t-ma.t,0.001);
+    const tc=ambCtx.currentTime;
+    ambWarm.frequency.setTargetAtTime(ma.c+(mb.c-ma.c)*mf, tc, 0.6);
+    if(ambRev) ambRev.gain.setTargetAtTime(ma.r+(mb.r-ma.r)*mf, tc, 0.6);
+  }
+
+  // Camera path
+  const cp=CAM.getPoint(clamp(sT,0,1));
+  const cp2=CAM.getPoint(clamp(sT+.02,0,1));
+  cam.position.lerp(cp,.09);
+  // Look ahead along path
+  lookTarget.subVectors(cp2,cp).normalize().multiplyScalar(18).add(cam.position);
+  lookTarget.y=1.8;
+  cam.lookAt(lookTarget);
+
+  // Orb: float ahead of camera, NO lookAt (just spin)
+  const orbT=clamp(sT+.025,0,1);
+  const orbP=CAM.getPoint(orbT);
+  orbP.y=1.9+Math.sin(et*1.8)*.18;
+  orbGrp.position.lerp(orbP,.1);
+  // Spin rings independently
+  orbRings[0].rotation.z=et*0.9;
+  orbRings[1].rotation.z=-et*0.6;
+  orbRings[2].rotation.z=et*1.2;
+  orbRings[0].rotation.x+=dt*0.3;
+  orbLight.intensity=2.8+Math.sin(et*3)*.6;
+  orbLight.color.copy(curGlowColor);
+  orbGrp.children[0].material.color.lerp(curGlowColor,.04);
+  orbGrp.children[0].material.emissive.lerp(curGlowColor,.04);
+  orbRings.forEach(r=>r.material.color.lerp(curGlowColor,.04));
+  rain.material.color.lerp(curGlowColor,.03);
+
+  // Contact transmission node
+  ctxNode.rotation.y=et*0.35;
+  ctxRings[0].rotation.z=et*0.8;
+  ctxRings[1].rotation.z=-et*0.55;
+  ctxRings[2].rotation.z=et*1.1;
+  ctxLight.intensity=2.4+Math.sin(et*2.6)*.9;
+  ctxLight.color.copy(curGlowColor);
+  ctxSphere.material.color.lerp(curGlowColor,.04);
+  ctxSphere.material.emissive.lerp(curGlowColor,.04);
+  ctxRings.forEach(r=>r.material.color.lerp(curGlowColor,.04));
+
+  // Rain
+  const rp=rain.geometry.attributes.position;
+  for(let i=0;i<RN;i++){
+    rp.setY(i,rp.getY(i)-rnS[i]);
+    if(rp.getY(i)<.3)rp.setY(i,35+Math.random()*5);
+  }
+  rp.needsUpdate=true;
+
+  // Rings — fade by distance so they don't bleed into screen edges
+  rings.forEach((r,i)=>{
+    r.rotation.z=et*.32*(i%2===0?1:-1);
+    r.material.color.lerp(curGlowColor,.03);
+    const rd=cam.position.distanceTo(r.position);
+    r.material.opacity=clamp((rd-7)/8,0,1)*(.14+i*.014);
+    r.material.transparent=true;
+  });
+
+  // Labels/tags — visible only 4–16 units ahead, invisible behind camera
+  allLabels.forEach(s=>{
+    const ld=cam.position.distanceTo(s.position);
+    const ahead=s.position.z < cam.position.z;
+    const op=ahead ? clamp((ld-4)/4,0,1)*clamp((16-ld)/6,0,1) : 0;
+    s.material.opacity=op;
+  });
+
+  // Grid follows cam (smooth lerp — no snapping)
+  gridZ+=(cam.position.z-gridZ)*0.08;
+  gA.position.z=gridZ;gB.position.z=gridZ;
+
+  // ── Card fade-in based on camera distance ──────────
+  _cardTint.setRGB(
+    0.52+curGlowColor.r*0.48,
+    0.52+curGlowColor.g*0.48,
+    0.52+curGlowColor.b*0.48
+  );
+  allCards.forEach(m=>{
+    const dist=cam.position.distanceTo(m.position);
+    const op=clamp(1-(dist-10)/22,0,1)*clamp((dist-4)/5,0,1);
+    m.material.opacity=op;
+    m.material.color.lerp(_cardTint,0.022);
+    if(m.userData.light){
+      m.userData.light.intensity=op*1.1;
+      m.userData.light.color.copy(curGlowColor);
+    }
+  });
+
+  // ── Hover ──────────────────────────────────────────
+  raycaster.setFromCamera(mpos,cam);
+  const hits=raycaster.intersectObjects(clickables);
+  const hitMesh=hits.length?hits[0].object:null;
+  clickables.forEach(m=>{
+    const tgt=m===hitMesh?1.065:1.0;
+    m.scale.x+=(tgt-m.scale.x)*.13;
+    m.scale.y+=(tgt-m.scale.y)*.13;
+  });
+  cvs.style.cursor=hitMesh?'pointer':'default';
+  hintEl.classList.toggle('on',!!hitMesh);
+
+  // ── HUD ────────────────────────────────────────────
+  const cz=cam.position.z;
+  let zone='HERO';
+  if(cz<46&&cz>=22)        zone='ABOUT';
+  else if(cz<22&&cz>=-8)   zone='PROJECTS';
+  else if(cz<-8&&cz>=-46)  zone='BEYOND QA';
+  else if(cz<-46&&cz>=-70) zone='EXPERIENCE';
+  else if(cz<-70)           zone='CONTACT';
+
+  if(zone!==curZone){
+    curZone=zone;
+    secEl.textContent=zone;
+    chipEl.textContent=zone.replace(' ','_')+'_ZONE';
+  }
+  crdEl.innerHTML=`Z: ${(cz>=0?'+':'')+cz.toFixed(1)}<br>// ${curZone}`;
+  pfEl.style.width=(sT*100).toFixed(1)+'%';
+
+  const hv=clamp(1-sT*12,0,1);
+  heroEl.style.opacity=hv;
+  heroEl.classList.toggle('away',hv<.04);
+  shEl.classList.toggle('gone',hv<.12);
+  if(sT>.94&&!czShown){czShown=true;openCzone();}
+  if(sT<=.92&&czShown){czShown=false;closeCzone();czoneAnimated=false;}
+
+  renderer.render(scene,cam);
+}
+
+// ── Resize ────────────────────────────────────────────
+window.addEventListener('resize',()=>{
+  VW=innerWidth;VH=innerHeight;
+  cam.aspect=VW/VH;cam.updateProjectionMatrix();
+  renderer.setSize(VW,VH);
+});
+
+loop();
+</script>
 </body>
 </html>
