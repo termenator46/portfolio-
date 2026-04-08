@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1000">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111225"/>
+      <stop offset="1" stop-color="#2a2d58"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#79f3bd" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#79f3bd" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#ffffff" stroke-opacity="0.06"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="1000" fill="url(#bg)"/>
+  <rect width="900" height="1000" fill="url(#glow)"/>
+  <rect width="900" height="1000" fill="url(#grid)"/>
+
+  <rect x="74" y="164" width="752" height="706" rx="28" fill="#090c16" fill-opacity="0.64" stroke="#ffffff" stroke-opacity="0.16"/>
+  <rect x="74" y="164" width="752" height="76" rx="28" fill="#12182a" fill-opacity="0.84"/>
+  <circle cx="108" cy="202" r="6" fill="#5ed29c"/>
+  <circle cx="132" cy="202" r="6" fill="#4e85bf"/>
+  <circle cx="156" cy="202" r="6" fill="#ffffff" fill-opacity="0.42"/>
+
+  <rect x="112" y="286" width="676" height="210" rx="20" fill="#0f1423" stroke="#8eb2ff" stroke-opacity="0.34"/>
+  <text x="142" y="338" fill="#dff1ff" font-size="24" font-family="Inter, Arial">Suite Health</text>
+  <rect x="142" y="366" width="504" height="16" rx="8" fill="#29364f"/>
+  <rect x="142" y="366" width="450" height="16" rx="8" fill="#5ed29c"/>
+  <text x="662" y="380" fill="#dff1ff" font-size="18" font-family="Inter, Arial">89%</text>
+
+  <g font-family="Inter, Arial" font-size="20">
+    <text x="142" y="440" fill="#9bd2be">Locator Stability ...................... 96%</text>
+    <text x="142" y="472" fill="#9bd2be">Retry-free Runs ........................ 92%</text>
+  </g>
+
+  <rect x="112" y="532" width="676" height="292" rx="20" fill="#111729" stroke="#ffffff" stroke-opacity="0.14"/>
+  <text x="142" y="586" fill="#e8f4ff" font-size="24" font-family="Inter, Arial">Execution Matrix</text>
+  <g font-family="Consolas, 'Courier New', monospace" font-size="18" fill="#95aac5">
+    <text x="142" y="632">[chrome]  checkout-flow ........ PASS</text>
+    <text x="142" y="664">[firefox] profile-update ....... PASS</text>
+    <text x="142" y="696">[webkit]  auth-session ......... PASS</text>
+    <text x="142" y="728">[mobile]  payment-gateway ...... PASS</text>
+    <text x="142" y="760">[grid]    visual-regression .... PASS</text>
+  </g>
+
+  <text x="74" y="118" fill="#ffffff" font-size="54" font-family="Inter, Arial" font-weight="700">UI Selenium Suite</text>
+</svg>
