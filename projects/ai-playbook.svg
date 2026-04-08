@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e1018"/>
+      <stop offset="1" stop-color="#25354f"/>
+    </linearGradient>
+    <radialGradient id="accent" cx="0.7" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#78f6bf" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#78f6bf" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="matrix" width="14" height="14" patternUnits="userSpaceOnUse">
+      <rect width="1" height="1" fill="#ffffff" fill-opacity="0.08"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#accent)"/>
+  <rect width="1600" height="1000" fill="url(#matrix)"/>
+
+  <text x="118" y="112" fill="#f2f8ff" font-size="62" font-family="Inter, Arial" font-weight="700">AI Output Validation Playbook</text>
+
+  <rect x="96" y="160" width="1408" height="760" rx="34" fill="#0c121d" fill-opacity="0.64" stroke="#ffffff" stroke-opacity="0.14"/>
+
+  <rect x="142" y="228" width="560" height="618" rx="26" fill="#111a2a" stroke="#7b9ed2" stroke-opacity="0.3"/>
+  <text x="178" y="286" fill="#dce9ff" font-size="30" font-family="Inter, Arial">Evaluation Axes</text>
+  <g font-family="Inter, Arial" font-size="23">
+    <text x="178" y="344" fill="#7ff1bd">- coherence consistency</text>
+    <text x="178" y="392" fill="#b9d6ff">- tone alignment</text>
+    <text x="178" y="440" fill="#b9d6ff">- relevance scoring</text>
+    <text x="178" y="488" fill="#b9d6ff">- instruction adherence</text>
+    <text x="178" y="536" fill="#b9d6ff">- safety regression checks</text>
+  </g>
+
+  <rect x="746" y="228" width="712" height="280" rx="26" fill="#10192a" stroke="#ffffff" stroke-opacity="0.14"/>
+  <text x="784" y="286" fill="#e8f5ff" font-size="28" font-family="Inter, Arial">Model Drift Snapshot</text>
+  <polyline points="784,452 854,424 926,442 998,408 1070,418 1142,376 1214,384 1286,354 1358,344" fill="none" stroke="#7ff1bd" stroke-width="5"/>
+
+  <rect x="746" y="542" width="712" height="304" rx="26" fill="#111b2b" stroke="#ffffff" stroke-opacity="0.14"/>
+  <text x="784" y="600" fill="#e8f5ff" font-size="28" font-family="Inter, Arial">Release Gate</text>
+  <g font-family="Consolas, 'Courier New', monospace" font-size="22">
+    <text x="784" y="658" fill="#9bd5c2">Prompt Suite ............ PASS</text>
+    <text x="784" y="700" fill="#9bd5c2">Behavior Drift .......... PASS</text>
+    <text x="784" y="742" fill="#9bd5c2">Safety Regression ....... PASS</text>
+    <text x="784" y="784" fill="#9bd5c2">Tone Consistency ........ PASS</text>
+  </g>
+</svg>
