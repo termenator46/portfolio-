@@ -10,7 +10,8 @@ import ContactFormModal from "./components/ContactFormModal";
 gsap.registerPlugin(ScrollTrigger);
 
 const HLS_SOURCE = "https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8";
-const VOICE_SOURCE = "/voice-intro.m4a";
+const BASE = import.meta.env.BASE_URL;
+const VOICE_SOURCE = `${BASE}voice-intro.m4a`;
 const CODENEST_HLS_SOURCE = "https://stream.mux.com/NcU3HlHeF7CUL86azTTzpy3Tlb00d6iF3BmCdFslMJYM.m3u8";
 
 const loadingWords = ["Design", "Create", "Inspire"];
@@ -40,7 +41,7 @@ const works: WorkCard[] = [
     tech: ["Java", "RestAssured", "Jenkins", "Allure"],
     url: "https://github.com/termenator46/amr-fleet",
     image:
-      "/projects/api-automation.svg",
+      `${BASE}projects/api-automation.svg`,
     span: "md:col-span-7",
     ratio: "aspect-[16/10]"
   },
@@ -53,7 +54,7 @@ const works: WorkCard[] = [
     tech: ["Selenium", "TestNG", "Page Object", "Java"],
     url: "https://github.com/termenator46/qa-utils",
     image:
-      "/projects/ui-selenium.svg",
+      `${BASE}projects/ui-selenium.svg`,
     span: "md:col-span-5",
     ratio: "aspect-[9/10]"
   },
@@ -66,7 +67,7 @@ const works: WorkCard[] = [
     tech: ["JavaScript", "MySQL", "Webhooks", "Fingerprinting"],
     url: "https://github.com/termenator46/fraud-intelligence-dashboard",
     image:
-      "/projects/fraud-dashboard.svg",
+      `${BASE}projects/fraud-dashboard.svg`,
     span: "md:col-span-5",
     ratio: "aspect-[9/10]"
   },
@@ -79,7 +80,7 @@ const works: WorkCard[] = [
     tech: ["AI QA", "Regression", "Edge Cases", "Jira"],
     url: "https://github.com/termenator46/slam-demo",
     image:
-      "/projects/ai-playbook.svg",
+      `${BASE}projects/ai-playbook.svg`,
     span: "md:col-span-7",
     ratio: "aspect-[16/10]"
   },
@@ -92,7 +93,7 @@ const works: WorkCard[] = [
     tech: ["Grafana", "SQL", "MySQL", "Chatwoot"],
     url: "https://github.com/termenator46/grafana-qa-monitoring",
     image:
-      "/projects/grafana-suite.svg",
+      `${BASE}projects/grafana-suite.svg`,
     span: "md:col-span-12",
     ratio: "aspect-[21/8]"
   }
