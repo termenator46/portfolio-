@@ -28,7 +28,7 @@ type WorkCard = {
   url: string;
   image: string;
   span: string;
-  ratio: string;
+  aspectRatio: string;
 };
 
 const works: WorkCard[] = [
@@ -40,10 +40,9 @@ const works: WorkCard[] = [
       "Reusable auth and request builders, schema validation, and Jenkins plus Allure runs for fast release confidence.",
     tech: ["Java", "RestAssured", "Jenkins", "Allure"],
     url: "https://github.com/termenator46/amr-fleet",
-    image:
-      `${BASE}projects/api-automation.svg`,
+    image: `${BASE}projects/api-automation.svg`,
     span: "md:col-span-7",
-    ratio: "aspect-[16/10]"
+    aspectRatio: "16/10",
   },
   {
     title: "UI Selenium Suite",
@@ -53,10 +52,9 @@ const works: WorkCard[] = [
       "Page Object architecture with reliable waits and locators focused on long-term regression stability.",
     tech: ["Selenium", "TestNG", "Page Object", "Java"],
     url: "https://github.com/termenator46/qa-utils",
-    image:
-      `${BASE}projects/ui-selenium.svg`,
+    image: `${BASE}projects/ui-selenium.svg`,
     span: "md:col-span-5",
-    ratio: "aspect-[9/10]"
+    aspectRatio: "9/10",
   },
   {
     title: "Fraud Intelligence Dashboard",
@@ -66,10 +64,9 @@ const works: WorkCard[] = [
       "Live multi-account fraud scoring and alert triage with weighted signals and detail panels.",
     tech: ["JavaScript", "MySQL", "Webhooks", "Fingerprinting"],
     url: "https://github.com/termenator46/fraud-intelligence-dashboard",
-    image:
-      `${BASE}projects/fraud-dashboard.svg`,
+    image: `${BASE}projects/fraud-dashboard.svg`,
     span: "md:col-span-5",
-    ratio: "aspect-[9/10]"
+    aspectRatio: "9/10",
   },
   {
     title: "AI Output Validation Playbook",
@@ -79,10 +76,9 @@ const works: WorkCard[] = [
       "A structured QA method for non-deterministic AI outputs across tone, relevance, and regression checks.",
     tech: ["AI QA", "Regression", "Edge Cases", "Jira"],
     url: "https://github.com/termenator46/slam-demo",
-    image:
-      `${BASE}projects/ai-playbook.svg`,
+    image: `${BASE}projects/ai-playbook.svg`,
     span: "md:col-span-7",
-    ratio: "aspect-[16/10]"
+    aspectRatio: "16/10",
   },
   {
     title: "Grafana QA Monitoring Suite",
@@ -92,10 +88,9 @@ const works: WorkCard[] = [
       "Cross-instance monitoring with anomaly detection and production KPI tracking for three brands.",
     tech: ["Grafana", "SQL", "MySQL", "Chatwoot"],
     url: "https://github.com/termenator46/grafana-qa-monitoring",
-    image:
-      `${BASE}projects/grafana-suite.svg`,
+    image: `${BASE}projects/grafana-suite.svg`,
     span: "md:col-span-12",
-    ratio: "aspect-[21/8]"
+    aspectRatio: "21/8",
   }
 ];
 
@@ -677,86 +672,136 @@ function SelectedWorksSection() {
         </motion.div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-12 md:gap-5">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-12 md:gap-5">
           {works.map((work, idx) => (
             <motion.article
               key={work.title}
-              initial={{ opacity: 0, y: 40, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.75, delay: idx * 0.09, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -5, transition: { duration: 0.28 } }}
-              className={`group relative cursor-pointer overflow-hidden ${work.span} ${work.ratio} max-md:aspect-auto flex flex-col md:block`}
-              style={{ borderRadius: "20px", background: "#0c1210", border: "1px solid rgba(255,255,255,0.07)" }}
+              initial={{ opacity: 0, y: 56 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.9, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{
+                y: -10,
+                boxShadow: "0 28px 72px rgba(0,0,0,0.6), 0 0 0 1px rgba(94,210,156,0.18), inset 0 1px 0 rgba(255,255,255,0.08)",
+                transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+              }}
+              className={`group relative flex flex-col overflow-hidden ${work.span}`}
+              style={{
+                borderRadius: "22px",
+                background: "#080d0b",
+                border: "1px solid rgba(255,255,255,0.07)",
+                boxShadow: "0 4px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
+              }}
             >
-              {/* Glow border on hover */}
-              <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
-                style={{ borderRadius: "20px", boxShadow: "inset 0 0 0 1px rgba(94,210,156,0.22), 0 8px 40px rgba(94,210,156,0.07)" }} />
+              {/* ── IMAGE ZONE ── */}
+              <div className="relative overflow-hidden" style={{ height: "230px", flexShrink: 0 }}>
 
-              {/* Corner accents on hover — desktop only */}
-              <div className="pointer-events-none absolute left-0 top-0 h-9 w-9 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <div className="absolute left-[10px] top-[10px] h-px w-7 bg-[#5ed29c]/70" />
-                <div className="absolute left-[10px] top-[10px] h-7 w-px bg-[#5ed29c]/70" />
-              </div>
-              <div className="pointer-events-none absolute bottom-0 right-0 h-9 w-9 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <div className="absolute bottom-[10px] right-[10px] h-px w-7 bg-[#5ed29c]/70" />
-                <div className="absolute bottom-[10px] right-[10px] h-7 w-px bg-[#5ed29c]/70" />
-              </div>
+                {/* Stage spotlight — green glow from above */}
+                <div className="absolute inset-0" style={{
+                  background: "radial-gradient(ellipse at 50% -10%, rgba(94,210,156,0.14) 0%, rgba(6,10,8,0.97) 68%)"
+                }} />
 
-              {/* ── TOP HEADER BAR ── */}
-              {/* Mobile: relative (in flow). Desktop: absolute */}
-              <div className="relative md:absolute inset-x-0 top-0 z-10 flex items-center justify-between px-5 pt-4 pb-3 bg-[#0c1210]">
-                <div className="flex gap-2">
-                  <span className="rounded-full border border-white/[0.14] bg-black/50 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white/75 backdrop-blur-sm">
-                    {work.badge}
-                  </span>
-                  <span className="rounded-full border border-[#5ed29c]/30 bg-[#5ed29c]/[0.12] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-[#5ed29c] backdrop-blur-sm">
-                    {work.impact}
-                  </span>
+                {/* Scan-line texture */}
+                <div className="pointer-events-none absolute inset-0" style={{
+                  backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 3px)",
+                  opacity: 0.5
+                }} />
+
+                {/* Ghost index number — decorative depth */}
+                <span
+                  className="pointer-events-none absolute bottom-2 right-5 select-none font-mono font-bold leading-none text-white/[0.035]"
+                  style={{ fontSize: "80px" }}
+                >
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
+
+                {/* Project image */}
+                <img
+                  src={work.image}
+                  alt={work.title}
+                  loading="lazy"
+                  className="relative z-10 h-full w-full object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                />
+
+                {/* Bottom vignette */}
+                <div
+                  className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-20"
+                  style={{ background: "linear-gradient(to top, #080d0b 10%, transparent 100%)" }}
+                />
+
+                {/* Badges — top left */}
+                <div className="absolute left-4 top-4 z-30 flex gap-1.5">
+                  <span style={{
+                    background: "rgba(0,0,0,0.75)", border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: "7px", padding: "4px 10px", fontSize: "9px", fontWeight: 700,
+                    letterSpacing: "0.24em", textTransform: "uppercase", color: "rgba(255,255,255,0.55)",
+                    backdropFilter: "blur(10px)",
+                  }}>{work.badge}</span>
+                  <span style={{
+                    background: "rgba(94,210,156,0.1)", border: "1px solid rgba(94,210,156,0.3)",
+                    borderRadius: "7px", padding: "4px 10px", fontSize: "9px", fontWeight: 700,
+                    letterSpacing: "0.24em", textTransform: "uppercase", color: "#5ed29c",
+                    backdropFilter: "blur(10px)",
+                  }}>{work.impact}</span>
                 </div>
-                <a href={work.url} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}
-                  className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.1] bg-black/50 text-[11px] text-white/50 backdrop-blur-sm transition-opacity duration-300 opacity-60 md:opacity-0 md:group-hover:opacity-100">
-                  ↗
-                </a>
+
+                {/* External link — top right */}
+                <a
+                  href={work.url} target="_blank" rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute right-4 top-4 z-30 flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.09] bg-black/70 text-[13px] text-white/35 backdrop-blur-sm transition-all duration-300 hover:border-[#5ed29c]/50 hover:text-[#5ed29c]"
+                >↗</a>
               </div>
 
-              {/* Separator line — desktop only */}
-              <div className="hidden md:block absolute inset-x-0 z-10 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" style={{ top: "46px", height: "1px" }} />
+              {/* ── CONTENT ZONE ── */}
+              <div className="flex flex-1 flex-col px-6 pb-6 pt-4">
 
-              {/* Project image */}
-              {/* Mobile: relative with fixed height. Desktop: absolute fills remaining space */}
-              <div className="relative md:absolute md:inset-x-0 md:bottom-0 h-[180px] md:h-auto" style={{ top: "47px" }}>
-                <img src={work.image} alt={work.title} loading="lazy"
-                  className="h-full w-full object-contain p-3 transition-transform duration-700 md:group-hover:scale-[1.03]" />
-              </div>
-
-              {/* Gradient overlay — desktop hover only */}
-              <div className="hidden md:block pointer-events-none absolute inset-x-0 bottom-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                style={{ top: "47px", background: "linear-gradient(to top, #0a0f0d 40%, rgba(10,15,13,0.85) 70%, transparent 100%)" }} />
-
-              {/* Content */}
-              {/* Mobile: always visible, relative (in flow). Desktop: hover-reveal, absolute bottom */}
-              <div className="relative md:absolute md:inset-x-0 md:bottom-0 z-20 p-5 md:p-6
-                translate-y-0 opacity-100
-                md:translate-y-4 md:opacity-0
-                transition-all duration-300 ease-out
-                md:group-hover:translate-y-0 md:group-hover:opacity-100
-                border-t border-white/[0.06] md:border-t-0">
-                <h3 className="mb-1.5 text-[15px] font-semibold text-white md:text-[18px]">{work.title}</h3>
-                <p className="mb-3 max-w-sm text-[12px] leading-relaxed text-white/55 md:text-[13px]">{work.description}</p>
-                <div className="mb-4 flex flex-wrap gap-1.5">
-                  {work.tech.map((tech) => (
-                    <span key={`${work.title}-${tech}`}
-                      className="rounded-lg border border-white/[0.1] bg-black/50 px-2.5 py-1 text-[10px] uppercase tracking-[0.12em] text-white/60 backdrop-blur-sm">
-                      {tech}
-                    </span>
-                  ))}
+                {/* Elegant separator */}
+                <div className="mb-5 flex items-center gap-3">
+                  <div className="h-px flex-1 bg-white/[0.06]" />
+                  <div className="h-[3px] w-[3px] rounded-full bg-[#5ed29c]/50" />
+                  <div className="h-px flex-1 bg-white/[0.06]" />
                 </div>
-                <a href={work.url} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#5ed29c]/35 bg-[#5ed29c]/[0.1] px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-[#5ed29c] backdrop-blur-sm transition-all duration-300 hover:bg-[#5ed29c]/[0.2]">
-                  GitHub →
-                </a>
+
+                {/* Title */}
+                <h3
+                  className="mb-3 text-white/90 transition-colors duration-300 group-hover:text-white"
+                  style={{ fontSize: "clamp(16px, 1.5vw, 20px)", fontWeight: 600, lineHeight: 1.22, letterSpacing: "-0.02em" }}
+                >
+                  {work.title}
+                </h3>
+
+                {/* Description */}
+                <p className="mb-6 flex-1 leading-[1.7] text-white/38" style={{ fontSize: "12.5px" }}>
+                  {work.description}
+                </p>
+
+                {/* Footer */}
+                <div className="flex items-center justify-between gap-3">
+                  <p className="truncate text-white/25" style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                    {work.tech.join(" · ")}
+                  </p>
+                  <a
+                    href={work.url} target="_blank" rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="group/gh shrink-0 inline-flex items-center gap-1.5 rounded-full text-[#5ed29c]/55 transition-all duration-300 hover:text-[#5ed29c]"
+                    style={{
+                      fontSize: "9.5px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase",
+                      border: "1px solid rgba(94,210,156,0.18)", background: "rgba(94,210,156,0.04)",
+                      padding: "7px 16px",
+                    }}
+                  >
+                    GitHub
+                    <span className="transition-transform duration-300 group-hover/gh:translate-x-0.5">→</span>
+                  </a>
+                </div>
               </div>
+
+              {/* Bottom accent line */}
+              <div
+                className="absolute inset-x-8 bottom-0 h-px opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                style={{ background: "linear-gradient(90deg, transparent, rgba(94,210,156,0.4), transparent)" }}
+              />
             </motion.article>
           ))}
         </div>
