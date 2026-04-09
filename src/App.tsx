@@ -686,14 +686,14 @@ function SelectedWorksSection() {
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.75, delay: idx * 0.09, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -5, transition: { duration: 0.28 } }}
-              className={`group relative cursor-pointer overflow-hidden ${work.span} ${work.ratio}`}
+              className={`group relative cursor-pointer overflow-hidden ${work.span} ${work.ratio} max-md:aspect-auto flex flex-col md:block`}
               style={{ borderRadius: "20px", background: "#0c1210", border: "1px solid rgba(255,255,255,0.07)" }}
             >
               {/* Glow border on hover */}
               <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
                 style={{ borderRadius: "20px", boxShadow: "inset 0 0 0 1px rgba(94,210,156,0.22), 0 8px 40px rgba(94,210,156,0.07)" }} />
 
-              {/* Corner accents on hover */}
+              {/* Corner accents on hover — desktop only */}
               <div className="pointer-events-none absolute left-0 top-0 h-9 w-9 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <div className="absolute left-[10px] top-[10px] h-px w-7 bg-[#5ed29c]/70" />
                 <div className="absolute left-[10px] top-[10px] h-7 w-px bg-[#5ed29c]/70" />
@@ -703,8 +703,9 @@ function SelectedWorksSection() {
                 <div className="absolute bottom-[10px] right-[10px] h-7 w-px bg-[#5ed29c]/70" />
               </div>
 
-              {/* ── TOP HEADER BAR — темна смуга де бейджі ── */}
-              <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-5 pt-4 pb-3 bg-[#0c1210]">
+              {/* ── TOP HEADER BAR ── */}
+              {/* Mobile: relative (in flow). Desktop: absolute */}
+              <div className="relative md:absolute inset-x-0 top-0 z-10 flex items-center justify-between px-5 pt-4 pb-3 bg-[#0c1210]">
                 <div className="flex gap-2">
                   <span className="rounded-full border border-white/[0.14] bg-black/50 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white/75 backdrop-blur-sm">
                     {work.badge}
@@ -713,28 +714,36 @@ function SelectedWorksSection() {
                     {work.impact}
                   </span>
                 </div>
-                <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.1] bg-black/50 text-[11px] text-white/50 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+                <a href={work.url} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.1] bg-black/50 text-[11px] text-white/50 backdrop-blur-sm transition-opacity duration-300 opacity-60 md:opacity-0 md:group-hover:opacity-100">
                   ↗
-                </span>
+                </a>
               </div>
 
-              {/* Separator line under header */}
-              <div className="absolute inset-x-0 z-10 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" style={{ top: "46px", height: "1px" }} />
+              {/* Separator line — desktop only */}
+              <div className="hidden md:block absolute inset-x-0 z-10 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" style={{ top: "46px", height: "1px" }} />
 
-              {/* Project image — starts below header bar */}
-              <div className="absolute inset-x-0 bottom-0" style={{ top: "47px" }}>
+              {/* Project image */}
+              {/* Mobile: relative with fixed height. Desktop: absolute fills remaining space */}
+              <div className="relative md:absolute md:inset-x-0 md:bottom-0 h-[180px] md:h-auto" style={{ top: "47px" }}>
                 <img src={work.image} alt={work.title} loading="lazy"
-                  className="h-full w-full object-contain p-3 transition-transform duration-700 group-hover:scale-[1.03]" />
+                  className="h-full w-full object-contain p-3 transition-transform duration-700 md:group-hover:scale-[1.03]" />
               </div>
 
-              {/* HOVER overlay from bottom */}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 opacity-0 transition-opacity duration-400 group-hover:opacity-100"
+              {/* Gradient overlay — desktop hover only */}
+              <div className="hidden md:block pointer-events-none absolute inset-x-0 bottom-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 style={{ top: "47px", background: "linear-gradient(to top, #0a0f0d 40%, rgba(10,15,13,0.85) 70%, transparent 100%)" }} />
 
-              {/* HOVER content */}
-              <div className="absolute inset-x-0 bottom-0 z-20 translate-y-4 p-5 opacity-0 transition-all duration-400 ease-out group-hover:translate-y-0 group-hover:opacity-100 md:p-6">
-                <h3 className="mb-1.5 text-[16px] font-semibold text-white md:text-[18px]">{work.title}</h3>
-                <p className="mb-3 max-w-sm text-[12px] leading-relaxed text-white/58 md:text-[13px]">{work.description}</p>
+              {/* Content */}
+              {/* Mobile: always visible, relative (in flow). Desktop: hover-reveal, absolute bottom */}
+              <div className="relative md:absolute md:inset-x-0 md:bottom-0 z-20 p-5 md:p-6
+                translate-y-0 opacity-100
+                md:translate-y-4 md:opacity-0
+                transition-all duration-300 ease-out
+                md:group-hover:translate-y-0 md:group-hover:opacity-100
+                border-t border-white/[0.06] md:border-t-0">
+                <h3 className="mb-1.5 text-[15px] font-semibold text-white md:text-[18px]">{work.title}</h3>
+                <p className="mb-3 max-w-sm text-[12px] leading-relaxed text-white/55 md:text-[13px]">{work.description}</p>
                 <div className="mb-4 flex flex-wrap gap-1.5">
                   {work.tech.map((tech) => (
                     <span key={`${work.title}-${tech}`}
